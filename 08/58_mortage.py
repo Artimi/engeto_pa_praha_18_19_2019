@@ -22,7 +22,7 @@ def compute_totals(L, r, n):
 def compute_months(L, r, monthly_payment):
     months = []
     payment = 1
-    while L > 0:
+    while int(L) > 0:
         monthly_interest = L * r
         monthly_payment = min(L, monthly_payment)
         principal = monthly_payment - monthly_interest

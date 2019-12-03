@@ -1,7 +1,7 @@
-
 def vertical_histogram(sequence, bar_width=1):
     max_row = max(sequence)
     max_row_length = len(str(max_row))
+
     for level in range(max_row, 0, -1):
         row = f'{level:>{max_row_length}}|'
         for item in sequence:
