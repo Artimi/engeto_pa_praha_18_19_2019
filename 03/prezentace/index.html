@@ -1,0 +1,415 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/solarized.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <style>
+        .container {
+            display: flex;
+        }
+
+        .col {
+            flex: 1;
+        }
+    </style>
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <img src="img/engeto.png">
+            <h1>3. Dictionaries & sets</h1>
+        </section>
+
+	    <section>
+		    <h1>
+			    Last lesson
+		    </h1>
+	    </section>
+
+        <section>
+            <h3>if</h3>
+
+            <div class="container">
+                <div class="col">
+                    <pre><code class="python" data-trim>
+						if condition:
+							command_1
+							command_2
+						command_3
+                    </code></pre>
+                </div>
+                <div class="col">
+                    <img src="img/if.png">
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3>if else</h3>
+
+            <div class="container">
+                <div class="col">
+                    <pre><code class="python" data-trim>
+						if condition:
+							command_1
+							command_2
+						else:
+							command_3
+							command_4
+						command_5
+					</code></pre>
+                </div>
+                <div class="col">
+                    <img src="img/if-else.png">
+                </div>
+            </div>
+        </section>
+
+
+        <section>
+            <h3>if elif</h3>
+
+            <div class="container">
+                <div class="col">
+                    <pre><code class="python" data-trim>
+						if condition_1:
+							command_1
+							command_2
+						elif condition_2:
+							command_3
+							command_4
+						command_5
+                    </code></pre>
+                </div>
+                <div class="col">
+                    <img src="img/if-elif.png">
+                </div>
+            </div>
+        </section>
+
+
+	    <section>
+		    <h3>if elif else</h3>
+
+		    <div class="container">
+			    <div class="col">
+                    <pre><code class="python" data-trim>
+						if condition_1:
+							command_1
+						elif condition_2:
+							command_2
+						else:
+							command_3
+						command_4
+					</code></pre>
+			    </div>
+			    <div class="col">
+				    <img src="img/if-elif-else.png">
+			    </div>
+		    </div>
+	    </section>
+
+	    <section>
+		    <h3>Conditions</h3>
+		    <pre><code class="python" data-trim>
+				if variable:    ==      if bool(variable):
+			</code></pre>
+		    <pre><code class="python" data-trim>
+				bool(1) == True
+				bool(0) == False
+				bool('something') == True
+				bool('') == False
+				bool([]) == False
+				bool([0]) == True
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Logical operators - not</h3>
+		    <pre><code class="python" data-trim>
+			not True == False
+			not False == True
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Logical operators - and</h3>
+		    <pre><code class="python" data-trim>
+				True and True == True
+				True and False == False
+				False and True == False
+				False and False == False
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Logical operators - or</h3>
+		    <pre><code class="python" data-trim>
+				True or True == True
+				True or False == True
+				False or True == True
+				False or False == False
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Logical operators - evaluation</h3>
+		    <pre><code class="python" data-trim>
+				c1 and c2 and c3 and  c4
+				c1 and (c2 and (c3 and c4)))
+			</code></pre>
+		    Short-circuit evaluation - if c1 is False other conditions are not evaluated.
+		    If you are not sure about precedence - use parentheses!
+	    </section>
+
+	    <section>
+		    <h3>Logical ternary operator</h3>
+		    <pre><code class="python" data-trim>
+			    half = height // 2 if height is not None else None
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h1>
+			   Today's lesson
+		    </h1>
+	    </section>
+
+	    <section>
+		    <h3>
+			    Dictionary
+		    </h3>
+
+		    <div class="container">
+			    <div class="col">
+					<ul>
+						<li>condition - podmínka</li>
+						<li>integer - celé číslo</li>
+						<li>python - krajta</li>
+						<li>string - řetězec</li>
+					</ul>
+				</div>
+
+				<div class="col">
+					<pre><code class="python" data-trim>
+						words = {
+							'condition': 'podmínka',
+							'integer': 'celé číslo',
+							'python': 'krajta',
+							'string': 'řetězec',
+						}
+					</code></pre>
+				</div>
+			</div>
+	    </section>
+
+	    <section>
+		    <h3>Getting value</h3>
+		    <pre><code class="python" data-trim>
+				>>> words = {
+				...     'condition': 'podmínka',
+				...     'integer': 'celé číslo',
+				...     'python': 'krajta',
+				...     'string': 'řetězec',
+				... }
+				>>> words['python']
+				'krajta'
+		    </code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Getting value - missing key</h3>
+		    <pre><code class="python" data-trim>
+				>>> words['java']
+				Traceback (most recent call last):
+				  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+				KeyError: 'java'
+				>>> words.get('java', 'MISSING')
+				'MISSING'
+		    </code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Adding / updating</h3>
+		    <pre><code class="python" data-trim>
+			>>> words['java'] = 'jáva'
+			>>> words['python'] = 'hroznýš'
+			>>> words
+			{
+				'condition': 'podmínka',
+				'integer': 'celé číslo',
+				'java': 'jáva',
+				'python': 'hroznýš',
+				'string': 'řetězec'
+			}
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Deleting</h3>
+		    <pre><code class="python" data-trim>
+			>>> del words['java']
+			>>> words.pop('python')
+			'hroznýš'
+			>>> words
+			{
+				'condition': 'podmínka',
+				'integer': 'celé číslo',
+				'string': 'řetězec'
+			}
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Iterating</h3>
+		    <pre><code class="python" data-trim>
+				>>> words
+				{
+					'condition': 'podmínka',
+					'integer': 'celé číslo',
+					'string': 'řetězec'
+				}
+				>>> words.keys()
+				dict_keys(['condition', 'integer', 'string'])
+				>>> words.values()
+				dict_values(['podmínka', 'celé číslo', 'řetězec'])
+				>>> words.items()
+				dict_items([('condition', 'podmínka'), ('integer', 'celé číslo'), ('string', 'řetězec')])
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Nesting</h3>
+		    <pre><code class="python" data-trim>
+				>>> words['python'] = {'nature': 'krajta', 'it': 'programovací jazyk'}
+				>>> words
+				{
+					'condition': 'podmínka',
+					'integer': 'celé číslo',
+					'python': {'it': 'programovací jazyk', 'nature': 'krajta'},
+					'string': 'řetězec'
+				}
+				>>> words['python']['it']
+				'programovací jazyk'
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Update with another dict</h3>
+		    <pre><code class="python" data-trim>
+			>>> words.update({'float': 'desetinné číslo', 'string': 'řetěz'})
+			>>> words
+			{
+				'condition': 'podmínka',
+				'float': 'desetinné číslo',
+				'integer': 'celé číslo',
+				'python': {'it': 'programovací jazyk', 'nature': 'krajta'},
+				'string': 'řetěz'
+			}
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Set</h3>
+		    <pre><code class="python" data-trim>
+				>>> s = {1, 1, 2, 3, 8}
+				>>> s
+				{8, 1, 2, 3}
+			    >>> 3 in s
+			    True
+				>>> set('Engeto academy')
+				{'o', 'e', 'y', 't', 'c', 'm', ' ', 'a', 'E', 'd', 'n', 'g'}
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Adding / removing</h3>
+		    <pre><code class="python" data-trim>
+				>>> s.add(6)
+				>>> s
+				{1, 2, 3, 6, 8}
+				>>> s.remove(3)
+				>>> s
+				{1, 2, 6, 8}
+				>>> s.pop()
+				1 # random element
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Comparison</h3>
+		    <pre><code class="python" data-trim>
+			    >>> s1 = {1, 2, 3}
+			    >>> s2 = {2, 3}
+			    >>> s1 <= s2  # s1.issubset(s2)
+			    False
+			    >>> s1 >= s2  # s1.issuperset(s2)
+			    True
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Set operations</h3>
+		    <pre><code class="python" data-trim>
+				>>> s1 = {1, 2, 3}
+				>>> s2 = {2, 3, 4}
+				>>> s1 | s2  # s1.union(s2)
+				{1, 2, 3, 4}
+				>>> s1 & s2  # s1.intersection(s2)
+				{2, 3}
+				>>> s1 - s2  # s1.difference(s2)
+				{1}
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Hash</h3>
+		    <img src="img/hash.png">
+	    </section>
+
+	    <section>
+		    <h1>End</h1>
+	    </section>
+
+
+    </div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+	    history: true,
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>

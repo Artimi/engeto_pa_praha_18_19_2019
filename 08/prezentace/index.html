@@ -1,0 +1,813 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>8. Engeto</title>
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/solarized.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<style>
+		.container {
+			display: flex;
+		}
+
+		.col {
+			flex: 1;
+		}
+	</style>
+
+	<!-- Printing and PDF exports -->
+	<script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+<body>
+
+<div class="reveal">
+	<div class="slides">
+		<section>
+			<img src="img/engeto.png">
+			<h1>8. String formatting & Text files</h1>
+		</section>
+
+		<section>
+			<h1>Project #2 & GitHub Pull Requests</h1>
+		</section>
+
+		<section>
+			<div>
+				<img src="img/linkedin.jpg" width="400">
+			</div>
+			<div>
+				<a href="https://www.linkedin.com/in/petrsebek1/">petrsebek1</a>
+			</div>
+		</section>
+
+		<section>
+			<h1>
+				Last lesson
+			</h1>
+		</section>
+
+
+		<section>
+			<h3>Scopes</h3>
+			<pre><code class="python" data-trim>
+				>>> name = 'John'
+				>>> def func():
+				...     print(name)
+				>>> func()
+				John
+
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Scopes</h3>
+			<pre><code class="python" data-trim>
+				>>> def func():
+				...     name = 'John'
+				...     print(name)
+				>>> print(name, 'Smith')
+				Traceback (most recent call last):
+				  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+				NameError: name 'name' is not defined
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Scopes</h3>
+			<img src="img/scopes.png">
+		</section>
+
+		<section>
+			<h3>Built-in scope</h3>
+			<ul>
+				<li><a href="https://docs.python.org/3/library/stdtypes.html">Built-in types</a> </li>
+				<li><a href="https://docs.python.org/3/library/functions.html">Built-in functions</a> </li>
+			</ul>
+
+			<pre><code class="python" data-trim>
+				>>> import pprint
+				>>> pprint.pprint(__builtins__.__dict__)
+				{'ArithmeticError': &lt;class 'ArithmeticError'&gt;,
+				 'AssertionError': &lt;class 'AssertionError'&gt;,
+				 'AttributeError': &lt;class 'AttributeError'&gt;,
+				...
+				 'abs': &lt;built-in function abs&gt;,
+				 'all': &lt;built-in function all&gt;,
+				 'any': &lt;built-in function any&gt;,
+				...
+				 'tuple': &lt;class 'tuple'&gt;,
+				 'type': &lt;class 'type'&gt;,
+				 'vars': &lt;built-in function vars&gt;,
+				 'zip': &lt;class 'zip'&gt;}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Global</h3>
+			<pre><code class="python" data-trim>
+			name = 'John'
+
+			def print_name():
+				print(name)
+
+			print_name()
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				John
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Global</h3>
+			<pre><code class="python" data-trim>
+			name = 'John'
+
+			def print_name():
+				print(name)
+
+			print_name()
+			name = 'Bob'
+			print_name()
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				John
+				Bob
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Global</h3>
+			<pre><code class="python" data-trim>
+			name = 'John'
+
+			def print_name():
+				name = 'Bob'
+				print(name)
+
+			print_name()
+			print(name)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				Bob
+				John
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Global</h3>
+			<pre><code class="python" data-trim>
+			name = 'John'
+
+			def print_name():
+				name = 'Bob'
+				print('Locals:', locals())
+				print('Globals:', globals())
+				print(name)
+
+			print_name()
+			print(name)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				Locals: {'name': 'Bob'}
+				Globals {
+					'__name__': '__main__',
+					'__builtins__': &lt;module 'builtins' (built-in)&gt;,
+					'__file__': '/home/psebek/projects/engeto/07/global.py',
+					'name': 'John',
+					'print_name': &lt;function print_name at 0x7f8751945ef0&gt;
+					...
+				}
+				Bob
+				John
+			</code></pre>
+		</section>
+
+
+		<section>
+			<h3>Global</h3>
+			<pre><code class="python" data-trim>
+			name = 'John'
+
+			def print_name():
+				global name # <---- global keyword
+				name = 'Bob'
+				print(name)
+
+			print_name()
+			print(name)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				Bob
+				Bob
+			</code></pre>
+		</section>
+
+
+		<section>
+			<h3>Nested functions</h3>
+			<pre><code class="python" data-trim>
+            import random
+
+            def wrapper():
+                start = random.randint(1, 5)
+                end = random.randint(5, 10)
+                print('start = ', start, ', end = ', end)
+                def inner():
+                    return random.randint(start, end)
+                return inner
+
+            random_limits = wrapper()
+            print('#' * 20)
+            print(random_limits())
+            print('-' * 20)
+            print(random_limits())
+            </code></pre>
+
+			<pre><code data-trim>
+                start =  3, end = 8
+                ####################
+                6
+                --------------------
+                3
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Nested functions</h3>
+			<pre><code class="python" data-trim>
+                import random
+
+                def wrapper():
+                    start = random.randint(1, 5)
+                    end = random.randint(5, 10)
+                    print('start = ', start)
+                    print('end = ', end)
+
+                    def inner():
+                        nonlocal start
+                        nonlocal end
+                        start = end = 12
+                        return random.randint(start, end)
+
+                    return inner
+
+
+                random_limits = wrapper()
+                print('#' * 20)
+                print(random_limits())
+                print('-' * 20)
+                print(random_limits())
+            </code></pre>
+
+			<pre><code data-trim>
+				start =  2
+				end =  5
+				####################
+				12
+				--------------------
+				12
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Function arguments</h3>
+
+			<pre><code class="python" data-trim>
+			>>> def function(argument_1, argument_2):
+			...     print(argument_1, argument_2)
+			>>> function(1, 2)
+			1 2
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>Keyword arguments</h3>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> def function(argument, default_argument = 2):
+				...     print(argument, default_argument)
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(1)
+				1 2
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(1, 3)
+				1 3
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(1, default_argument = 4)
+				1 4
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(argument = 2, default_argument = 5)
+				2 5
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(default_argument = 5, argument = 3)
+				3 5
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>Variable number of arguments *</h3>
+			<pre><code class="python" data-trim>
+				>>> def function(*args):
+				...     print(args)
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(1, 2, 3)
+				(1, 2, 3)
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function()
+				()
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> l = [1, 2, 3]
+				>>> function(*l)
+				(1, 2, 3)
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>Variable number of keyword arguments **</h3>
+			<pre><code class="python" data-trim>
+				>>> def function(**kwargs):
+				...     print(kwargs)
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(a = 1, b = 2)
+				{'a': 1, 'b': 2}
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function()
+				{}
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> arguments = {'c': 3, 'd': 4}
+				>>> function(**arguments)
+				{'c': 3, 'd': 4}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Ultimate form of arguments</h3>
+			<pre><code class="python" data-trim>
+				>>> def function(a, b, *args, default = None, **kwargs):
+				...     print(a, b, args, default, kwargs)
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> function(1, 2, 3, 4, 5, key = 'KEY')
+				1 2 (3, 4, 5) None {'key': 'KEY'}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Never use mutables as defaults</h3>
+			<pre><code class="python" data-trim>
+				>>> def append(item, l = []):
+				...     l.append(item)
+				...     return l
+
+				>>> i = append(1)
+				>>> print(i)
+				[1]
+				>>> j = append(2)
+				>>> print(j)
+				[1, 2]
+				>>> print(i)
+				[1, 2]
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Never use mutables as defaults</h3>
+			<pre><code class="python" data-trim>
+				>>> def append(item, l = None):
+				...     if l is None:
+				...         l = []
+				...     l.append(item)
+				...     return l
+
+				>>> i = append(1)
+				>>> print(i)
+				[1]
+				>>> j = append(2)
+				>>> print(j)
+				[2]
+				>>> print(i)
+				[1]
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>
+				Today's lesson
+			</h1>
+		</section>
+
+		<section class="fragments">
+			<h3>String formatting</h3>
+			<pre><code class="python" data-trim>
+				>>> name = 'Guido'
+				>>> surname = 'van Rossum'
+				>>> age = 63
+				>>> print('Name:', name, ', surname:', surname, ', age:', age, '!')
+				Name: Guido , surname: van Rossum , age: 63 !
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> print('Name: ' + name + ', surname: ' + surname + ', age: ' + str(age) + '!')
+				Name: Guido, surname: van Rossum, age: 63!
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+			>>> print(f'Name: {name}, surname: {surname}, age: {age}!')
+			Name: Guido, surname: van Rossum, age: 63!
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>f-strings — width, alignment and fill</h3>
+			<a href="https://realpython.com/python-f-strings/">https://realpython.com/python-f-strings/</a>
+			<pre><code class="python" data-trim>
+				>>>> f'{name:10}'
+				'Guido     '
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>>> f'{name:>10}'
+				'     Guido'
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>>> f'{name:^10}'
+				'  Guido   '
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>>> f'{name:.^10}'
+				'..Guido...'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> width = 10
+				>>>> f'{name:.^{width}}'
+				'..Guido...'
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>f-strings — number format </h3>
+
+			<pre><code class="python" data-trim>
+				>>> price = 123.4567890
+				>>> f'{price}'
+				'123.456789'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> f'{price:.2}'
+				'1.2e+02'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> f'{price:.2f}'
+				'123.46'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> f'{price:e}'
+				'1.234568e+02'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> f'{price:+.2f}'
+				'+123.46'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> negative_price = -price
+				>>> f'{price: .2f} vs. {negative_price: .2f}'
+				' 123.46 vs. -123.46'
+			</code></pre>
+
+		</section>
+
+		<section>
+			<h3>f-strings — expressions</h3>
+
+			<pre><code class="python" data-trim>
+				>>> f'Surname length: {len(surname)}'
+				'Surname length: 10'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> f'lower full name: {name.lower()} {surname.lower()}'
+				'lower full name: guido van rossum'
+			</code></pre>
+
+			<span class="fragment">Don't complicate f-strings</span>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> import random
+				>>> f'Over threshold: {"yes" if random.random() > 0.3 else "no"}'
+				'Over threshold: yes'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> import random
+				>>> over_threshold = 'yes' if random.random() > 0.3 else 'no'
+				>>> f'Over threshold: {over_threshold}'
+				'Over threshold: no'
+			</code></pre>
+		</section>
+
+		<section>
+			<h3><code>.format()</code></h3>
+
+			<pre><code class="python" data-trim>
+				>>> 'Name: {}, surname: {}'.format(name, surname)
+				'Name: Guido, surname: van Rossum'
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> 'Name: {name}, surname: {surname}'.format(name = name, surname = surname)
+				'Name: Guido, surname: van Rossum'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> credentials = {'name': 'Guido', 'surname': 'van Rossum'}
+				>>> f'Name: {credentials["name"]}, surname: {credentials["surname"]}.'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> 'Name: {name}, surname: {surname}'.format(**credentials)
+				'Name: Guido, surname: van Rossum'
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>Exercise</h1>
+		</section>
+
+		<section>
+			Input:
+			<pre><code class="python" data-trim>
+			dataset = [
+				['Name', 'Item', 'Amount', 'Price', 'Total'],
+				['Bettison, Elnora', 'Doxycycline Hyclate', 98, 23.43, 2296.14],
+				['McShee, Glenn', 'DROXIA', 27, 33.86, 914.22],
+				['Conyard, Phil', 'Nadolol', 44, 12.35, 543.4],
+			]
+			</code></pre>
+			Output:
+			<pre><code class="python" data-trim>
+			==============================================================================
+			||         Name         |         Item         | Amount | Price  |  Total   ||
+			==============================================================================
+			|| Bettison, Elnora     | Doxycycline Hyclate  |     98 |  23.43 |  2296.14 ||
+			|| McShee, Glenn        | DROXIA               |     27 |  33.86 |   914.22 ||
+			|| Conyard, Phil        | Nadolol              |     44 |  12.35 |   543.40 ||
+			==============================================================================
+			</code></pre>
+
+		</section>
+
+
+		<section>
+			<h3><code>format_header</code></h3>
+			<pre><code class="python" data-trim>
+				>>> format_header(dataset[0])
+				'||         Name         |         Item         | Amount |  Price  | Total  ||'
+			</code></pre>
+			<ul>
+				<li>Aligned to the center</li>
+				<li>Name, Item width 20</li>
+				<li>Amount, Price  width 6</li>
+				<li>Total width 8</li>
+			</ul>
+
+		</section>
+
+		<section>
+			<h3><code>format_row</code></h3>
+			<pre><code class="python" data-trim>
+				>>> format_row(dataset[1])
+				'|| Bettison, Elnora     | Doxycycline Hyclate  |     98 |  23.43 | 2296.14 ||'
+			</code></pre>
+			<ul>
+				<li>Name, Item width 20, aligned to the left</li>
+				<li>Amount, Price  width 6, aligned to the rigth</li>
+				<li>Total width 8, aligned to the right</li>
+			</ul>
+
+		</section>
+
+		<section>
+			<h3><code>format_table</code></h3>
+			<pre><code class="python" data-trim>
+				>>> print(format_table(dataset))
+				==============================================================================
+				||         Name         |         Item         | Amount | Price  |  Total   ||
+				==============================================================================
+				|| Bettison, Elnora     | Doxycycline Hyclate  |     98 |  23.43 |  2296.14 ||
+				|| McShee, Glenn        | DROXIA               |     27 |  33.86 |   914.22 ||
+				|| Conyard, Phil        | Nadolol              |     44 |  12.35 |   543.40 ||
+				|| Bettison, Elnora     | Claravis             |     91 |   9.85 |   896.35 ||
+				|| Idalia, Craig        | Nadolol              |     83 |  12.35 |  1025.05 ||
+				|| Woodison, Annie      | Metolazone           |     46 |  43.06 |  1980.76 ||
+				|| Woodison, Annie      | DROXIA               |     50 |  33.86 |  1693.00 ||
+				|| Skupinski, Wilbert   | Nadolol              |     60 |  12.35 |   741.00 ||
+				==============================================================================
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>Files</h1>
+		</section>
+
+		<section>
+			<h3>File path</h3>
+			Windows
+			<pre><code class="python" data-trim>
+			C:\Users\Bob\Documents\gifts.txt
+			</code></pre>
+			Linux + Mac
+			<pre><code class="python" data-trim>
+			/home/Bob/Documents/gifts.txt
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Absolute vs. relative path</h3>
+			<pre><code class="bash" data-trim>
+				/home/Bob $ pwd
+				/home/Bob
+				/home/Bob $ cd Documents
+				/home/Bob/Documents $ cat gifts.txt # relative path
+				gifts file content
+				/home/Bob/Documents $ cat /home/Bob/Documents/gitfs.txt # absolute path
+				gifts file content
+				/home/Bob/Documents $ cd .. # parent directory
+				/home/Bob $ cat Documents/gifts.txt # relative path
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>File open, read and close</h3>
+			<pre class="fragment strike"><code class="python" data-trim>
+			file = open('gifts.txt')
+			content = file.read()
+			print(content)
+			file.close()
+			</code></pre>
+
+			<span class="fragment">Always use context manager</span>
+			<pre class="fragment"><code class="python" data-trim>
+            >>> with open('gifts.txt') as file:
+            ...     content = file.read()
+            ... print(content)
+            VR - 1000 USD
+            JetPack - 30000 USD
+            Book - 30 USD
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Open non-existent file</h3>
+			<pre><code class="python" data-trim>
+			>>> with open('g.txt.') as file:
+			...     content = file.read()
+			...
+			Traceback (most recent call last):
+			  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+			FileNotFoundError: [Errno 2] No such file or directory: 'g.txt.'
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>File write</h3>
+			<pre><code class="python" data-trim>
+			with open('gifts.txt', mode='w') as file:
+				file.write('Overwriting content of the file')
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Open for writing to non-existeng file</h3>
+			<pre><code class="python" data-trim>
+				>>> with open('g.txt', 'w') as file:
+				...     file.write('Hello world')
+				...
+				11
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>File open modes</h3>
+			<dl style="font-size:0.7em">
+				<dt><code>'r'</code></dt>
+				<dd>open for reading text, default</dd>
+
+				<dt><code>'w'</code></dt>
+				<dd>truncate and open for writing text</dd>
+
+				<dt><code>'a'</code></dt>
+				<dd>open for writing text, append at the end</dd>
+
+				<dt><code>'r+'</code></dt>
+				<dd>open for reading and writing text</dd>
+
+				<dt><code>'w+'</code></dt>
+				<dd>truncate and open for reading and writing text</dd>
+
+				<dt><code>'rb'</code></dt>
+				<dd>open for reading bytes</dd>
+
+				<dt><code>'wb'</code></dt>
+				<dd>truncate and open for writing bytes</dd>
+			</dl>
+		</section>
+
+		<section>
+			<h1>Exercise</h1>
+		</section>
+
+		<section>
+			<h3>interactive_copy.py</h3>
+			<ol>
+				<li>Ask user for a path to a file to read.</li>
+				<li>Open the file and read its content.</li>
+				<li>Ask user for a path to a file to write. </li>
+				<li>Write content of the first file to the second.</li>
+			</ol>
+
+			<pre><code class="python" data-trim>
+			$ python interactive_copy.py
+			Read file: gifts.txt
+			Write file: gifts_2.txt
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Reading file line by line</h3>
+			<pre><code class="python" data-trim>
+			>>> with open('gifts.txt') as file:
+			...     for line in file:
+			...         print('#', line, end='')
+			...
+			# VR - 1000 USD
+			# JetPack - 30000 USD
+			# Book - 30 USD
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>End</h1>
+		</section>
+
+	</div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        history: true,
+	    pdfSeparateFragments: false,
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>

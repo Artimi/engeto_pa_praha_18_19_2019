@@ -1,0 +1,651 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>12. Engeto</title>
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/solarized.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<style>
+		.container {
+			display: flex;
+		}
+
+		.col {
+			flex: 1;
+		}
+	</style>
+
+	<!-- Printing and PDF exports -->
+	<script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+<body>
+
+<div class="reveal">
+	<div class="slides">
+		<section>
+			<img src="img/engeto.png">
+			<h1>12. Web Scraping</h1>
+		</section>
+
+		<section>
+			<h3>Resources</h3>
+			<img src="img/automate_boring_stuff.jpg" height="400">
+			<img src="img/fluent_python.jpg" height="400">
+		</section>
+
+		<section>
+			<h3>Resources</h3>
+			<a href="https://junior.guru/">https://junior.guru/</a> <br>
+			<a href="https://naucse.python.cz/">https://naucse.python.cz/</a> <br>
+			<a href="https://pyvo.cz/">https://pyvo.cz/</a> <br>
+		</section>
+
+		<section>
+			<h1>
+				Last lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3>File formats</h3>
+			<img src="img/file_formats.png" width="600", height="450">
+		</section>
+
+		<section>
+			<h3>CSV</h3>
+			<ul>
+				<li>Comma-separated values</li>
+				<li>Each record on a new line</li>
+				<li>If a value contains comma wrap it to double-quotes</li>
+				<li>"Excel" format</li>
+				<li>Used for tabular data</li>
+				<li><a href="https://engeto.com/files/example.csv">example.csv</a> z webu Engeto</li>
+			</ul>
+			<pre><code class="nohighlight" data-trim>
+			Surname,Name,Full Name,Age,City,Job,Gender
+			Smith,John,"Smith, John",32,London,Programmer,
+			Doe,Joe,"Doe, Joe",34,Liverpool,,Male
+			Murphy,Ann,"Murphy, Ann",29,London,Admin,Female
+			Cook,Floyd,"Cook, Floyd",28,,Tester,Male
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Reading CSV</h3>
+			<pre><code class="python" data-trim>
+                import csv
+                with open('example.csv') as file:
+                    reader = csv.reader(file)
+                    for row in reader:
+                        print(row)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+			['Surname', 'Name', 'Full Name', 'Age', 'City', 'Job', 'Gender']
+			['Smith', 'John', 'Smith, John', '32', 'London', 'Programmer', '']
+			['Doe', 'Joe', 'Doe, Joe', '34', 'Liverpool', '', 'Male']
+			['Murphy', 'Ann', 'Murphy, Ann', '29', 'London', 'Admin', 'Female']
+			...
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Writing CSV</h3>
+			<pre><code class="python" data-trim>
+                import csv
+
+                data = [
+                    ['Surname', 'Name', 'Full Name', 'Age', 'City', 'Job', 'Gender'],
+                    ['Smith', 'John', 'Smith, John', '32', 'London', 'Programmer', ''],
+                    ['Doe', 'Joe', 'Doe, Joe', '34', 'Liverpool', '', 'Male'],
+                ]
+
+                with open('write.csv', 'w') as file:
+                    writer = csv.writer(file)
+                    for row in data:
+                        writer.writerow(row)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				Surname,Name,Full Name,Age,City,Job,Gender
+				Smith,John,"Smith, John",32,London,Programmer,
+				Doe,Joe,"Doe, Joe",34,Liverpool,,Male
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>CSV DictReader</h3>
+			<pre><code class="python" data-trim>
+                import csv
+
+                with open('example.csv') as file:
+                    reader = csv.DictReader(file)
+                    for row in reader:
+                        print(row)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				OrderedDict([('Surname', 'Smith'), ('Name', 'John'), ('Full Name', 'Smith, John'), ('Age', '32'), ('City', 'London'), ('Job', 'Programmer'), ('Gender', '')])
+				OrderedDict([('Surname', 'Doe'), ('Name', 'Joe'), ('Full Name', 'Doe, Joe'), ('Age', '34'), ('City', 'Liverpool'), ('Job', ''), ('Gender', 'Male')])
+				OrderedDict([('Surname', 'Murphy'), ('Name', 'Ann'), ('Full Name', 'Murphy, Ann'), ('Age', '29'), ('City', 'London'), ('Job', 'Admin'), ('Gender', 'Female')])
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>CSV DictWriter</h3>
+			<pre><code class="python" data-trim>
+                import csv
+
+                data = [
+                    {'Surname': 'Smith', 'Name': 'John', 'Full Name': 'Smith, John', 'Age': '32', 'City': 'London', 'Job': 'Programmer', 'Gender': ''},
+                    {'Surname': 'Doe', 'Name': 'Joe', 'Full Name': 'Doe, Joe', 'Age': '34', 'City': 'Liverpool', 'Job': '', 'Gender': 'Male'},
+                    {'Surname': 'Murphy', 'Name': 'Ann', 'Full Name': 'Murphy, Ann', 'Age': '29', 'City': 'London', 'Job': 'Admin', 'Gender': 'Female'},
+                ]
+
+                with open('write.csv', 'w') as file:
+                    writer = csv.DictWriter(file, fieldnames=['Surname', 'Name', 'Full Name', 'Age', 'City', 'Job', 'Gender'])
+                    for row in data:
+                        writer.writerow(row)
+            </code></pre>
+
+			<pre><code class="plain" data-trim>
+				Smith,John,"Smith, John",32,London,Programmer,
+				Doe,Joe,"Doe, Joe",34,Liverpool,,Male
+				Murphy,Ann,"Murphy, Ann",29,London,Admin,Female
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>JSON</h3>
+			<ul>
+				<li>JavaScript Object Notation</li>
+				<li>Very close to printed Python dictionary or list</li>
+				<li>Data types: Number, String, Boolean, Array, Object, <code>null</code></li>
+			</ul>
+
+			<pre><code class="python" data-trim>
+				{
+				  "firstName": "John",
+				  "lastName": "Smith",
+				  "isAlive": true,
+				  "age": 27,
+				  "address": {
+					"streetAddress": "21 2nd Street",
+					"city": "New York",
+					"state": "NY",
+					"postalCode": "10021-3100"
+				  },
+				  "phoneNumbers": [
+					{
+					  "type": "office",
+					  "number": "646 555-4567"
+					},
+					{
+					  "type": "mobile",
+					  "number": "123 456-7890"
+					}
+				  ],
+				  "children": [],
+				  "spouse": null
+				}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Python to JSON mapping</h3>
+			<ul>
+				<li>Non-string dictionary keys are converted to strings.</li>
+				<li><code>True</code> is mapped to <code>true</code> , <code>False</code> is mapped to <code>false</code>.</li>
+				<li><code>None</code> is mapped to <code>null</code>.</li>
+				<li>Single quotes on strings are converted to double quotes.</li>
+				<li><code>dict</code> is converted to <code>Object</code>.</li>
+				<li><code>list</code> is converted to <code>Array</code>.</li>
+				<li>Some object cannot be automatically converted, e.g. <code>set</code>.</li>
+			</ul>
+		</section>
+
+		<section>
+			<h3>Reading JSON</h3>
+			Wikipedia <a href="https://en.wikipedia.org/wiki/JSON#Example">JSON example</a>
+
+			<pre><code class="python" data-trim>
+                import json
+
+                with open('example.json') as file:
+                    person = json.load(file)
+                    print(person)
+			</code></pre>
+
+			<pre><code class="plain" data-trim>
+				{'firstName': 'John', 'lastName': 'Smith', 'isAlive': True, 'age': 27, 'address': {'streetAddress': '21 2nd Street', 'city': 'New York', 'state': 'NY', 'postalCode': '10021-3100'}, 'phoneNumbers': [{'type': 'home', 'number': '212 555-1234'}, {'type': 'office', 'number': '646 555-4567'}, {'type': 'mobile', 'number': '123 456-7890'}], 'children': [], 'spouse': None}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Writing JSON</h3>
+			<pre><code class="python" data-trim>
+                import json
+
+                person = {
+                    'fullName': 'John Smith',
+                    'phoneNumbers': [
+                        {'type': 'home', 'number': '212 555-1234'},
+                        {'type': 'office', 'number': '646 555-4567'},
+                        {'type': 'mobile', 'number': '123 456-7890'}
+                    ]
+                }
+
+                with open('write.json', 'w') as file:
+                    json.dump(person, file, indent=2)
+            </code></pre>
+
+			<pre><code class="plain" data-trim>
+                {
+                  "fullName": "John Smith",
+                  "phoneNumbers": [
+                    {
+                      "type": "home",
+                      "number": "212 555-1234"
+                    },
+                    {
+                      "type": "office",
+                      "number": "646 555-4567"
+                    },
+                    {
+                      "type": "mobile",
+                      "number": "123 456-7890"
+                    }
+                  ]
+                }
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>JSON is fine for lists too</h3>
+			<pre><code class="python" data-trim>
+                data = ['John', 'Jane', 'Jennifer']
+
+                with open('write.json', 'w') as file:
+                    json.dump(data, file, indent=2)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+                [
+                  "John",
+                  "Jane",
+                  "Jennifer"
+                ]
+            </code></pre>
+
+		</section>
+
+		<section>
+			<h3><a href="https://requests.kennethreitz.org/en/master/">Requests</a></h3>
+			Python HTTP library.
+			<pre><code class="python" data-trim>
+				$ pip install requests
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> import requests
+				>>> response = requests.get('https://seznam.cz')
+				>>> response.status_code
+				200
+				>>> response.text
+				'&lt;!DOCTYPE html&gt;&lt;html lang="cs" class="html-no-js html-no-flex html-no-column-count html-no-hover"&gt;&lt;head&gt;...
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>API</h3>
+			Application Programming Interface <br>
+			<a href="https://swapi.co">https://swapi.co</a>
+
+			<pre><code class="python" data-trim>
+				>>> import requests
+				>>> response = requests.get('https://swapi.co/api/people/1')
+				>>> response.text
+				'{"name":"Luke Skywalker","height":"172","mass":"77","hair_color":"blond","skin_color":"fair","eye_color":"blue","birth_year":"19BBY","gender":"male","homeworld":"https://swapi.co/api/planets/1/","films":["https://swapi.co/api/films/2/","https://swapi.co/api/films/6/","https://swapi.co/api/films/3/","https://swapi.co/api/films/1/","https://swapi.co/api/films/7/"],"species":["https://swapi.co/api/species/1/"],"vehicles":["https://swapi.co/api/vehicles/14/","https://swapi.co/api/vehicles/30/"],"starships":["https://swapi.co/api/starships/12/","https://swapi.co/api/starships/22/"],"created":"2014-12-09T13:50:51.644000Z","edited":"2014-12-20T21:17:56.891000Z","url":"https://swapi.co/api/people/1/"}'
+				>>> response.json()
+				{'name': 'Luke Skywalker',
+				 'height': '172',
+				 'mass': '77',
+				 'hair_color': 'blond',
+				 'skin_color': 'fair',
+				...
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>
+				Today's lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3>HTML</h3>
+			<h3>HTTP</h3>
+			<h3>Web scraping</h3>
+		</section>
+
+		<section>
+			<h3>HTML</h3>
+			<ul>
+				<li>Hypertext Markup Language</li>
+				<li><a href="https://www.w3schools.com/html/">W3C tutorial</a></li>
+			</ul>
+
+			<pre><code class="html" data-trim>
+                &lt;body&gt;
+                    &lt;h1&gt;This is a heading&lt;/h1&gt;
+                    &lt;p&gt;And this is the paragraph number 1&lt;/p&gt;
+                    &lt;p&gt; This is the paragraph number 2&lt;/p&gt;
+                &lt;/body&gt;
+            </code></pre>
+
+				<h1>This is a heading</h1>
+				<p>And this is the paragraph number 1</p>
+				<p> This is the paragraph number 2</p>
+		</section>
+
+		<section>
+			<h3>HTML element</h3>
+			<pre><code class="html" data-trim>
+				&lt;opening_tag&gt;Element Content&lt;/closing_tag&gt;
+			</code></pre>
+
+			<pre><code class="html" data-trim>
+				<p>This is a <strong>strong</strong>  <em>statement</em>. <strong><em>Watch out!</em></strong></p>
+			</code></pre>
+
+			<p>This is a <strong>strong</strong>  <em>statement</em>. <strong><em>Watch out!</em></strong></p>
+
+			Check more at <a href="https://htmlcheatsheet.com/">https://htmlcheatsheet.com/</a>
+		</section>
+
+		<section>
+			<h3>Tag attributes</h3>
+			<pre><code class="python" data-trim>
+				<a href="https://www.w3schools.com/html/">W3C tutorial</a>
+			</code></pre>
+			<a href="https://www.w3schools.com/html/">W3C tutorial</a>
+		</section>
+
+		<section>
+			<h1>HTML document organization</h1>
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			Change content of a web page using developer tools.
+			<img src="img/idnes.png">
+		</section>
+
+		<section>
+			<h3>HTTP</h3>
+			Hypertext Transfer Protocol<br>
+			Client - Server architecture
+			<img src="img/http_client_server.jpg">
+		</section>
+
+		<section>
+			Request:
+			<pre><code class="http" data-trim>
+				GET / HTTP/1.1
+				Host: www.example.com
+			</code></pre>
+
+			Response:
+			<pre><code class="http" data-trim>
+				HTTP/1.1 200 OK
+				Date: Mon, 23 May 2005 22:38:34 GMT
+				Content-Type: text/html; charset=UTF-8
+				Content-Length: 138
+				Last-Modified: Wed, 08 Jan 2003 23:11:55 GMT
+				Server: Apache/1.3.3.7 (Unix) (Red-Hat/Linux)
+				ETag: "3f80f-1b6-3e1cb03b"
+				Accept-Ranges: bytes
+				Connection: close
+
+				&lt;html&gt;
+				  &lt;head&gt;
+					&lt;title&gt;An Example Page&lt;/title&gt;
+				  &lt;/head&gt;
+				  &lt;body&gt;
+					&lt;p&gt;Hello World, this is a very simple HTML document.&lt;/p&gt;
+				  &lt;/body&gt;
+				&lt;/html&gt;
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>URL</h3>
+			<pre><code class="plain" data-trim>
+				protocol://host/path?query#fragment
+			</code></pre>
+			<pre><code class="plain" data-trim>
+				https://api.openweathermap.org/data/2.5/weather?q=London
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>HTTP Status codes</h3>
+			<ul>
+				<li>1xx: Informational</li>
+				<li>2xx: Success</li>
+				<li>3xx: Redirection</li>
+				<li>4xx: Client Error</li>
+				<li>5xx: Server Error</li>
+			</ul>
+		</section>
+
+		<section>
+			<h3>HTTP Methods</h3>
+				<dl style="font-size: 60%">
+					<dt>GET</dt> <dd>requests a given document or a video - in general a resource - this method is used to retrieve data</dd>
+					<dt>POST</dt> <dd>method used to send data to a server, e.g. for authentication or registration etc.</dd>
+					<dt>PUT</dt> <dd>similar to POST method in that we send some data to the server, but the server should update a given (existing) record or other resource to a new value, we send it</dd>
+					<dt>DELETE</dt> <dd>removes a given resource</dd>
+					<dt>HEAD</dt> <dd>asks for a response identical to that of a GET request, but without the response body</dd>
+					<dt>OPTIONS</dt> <dd>asks server, what methods are supported by a given resource - given web page etc.</dd>
+				</dl>
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			Check HTTP requests and responses using web browser for your favorite web. <br>
+			Check status codes, queried domains, file types and headers.
+		</section>
+
+		<section>
+			<h3>Web scraping</h3>
+			<ul>
+				<li>Download HTML from the server</li>
+				<li>Retrieve needed information</li>
+			</ul>
+			<br>
+			<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">Beautiful Soup</a>
+
+			<pre><code class="python" data-trim>
+				$ pip install beautifulsoup4
+				$ pip install requests
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Beautiful Soup</h3>
+			<pre><code class="python" data-trim>
+				>>> import requests
+				>>> from bs4 import BeautifulSoup as BS
+				>>> r = requests.get("https://example.com")
+				>>> soup = BS(r.text)
+
+				>>> soup.p
+				<p>This domain is for use in illustrative examples in documents. You may use this
+				domain in literature without prior coordination or asking for permission.</p>
+
+				>>> soup.find_all('p')
+				[<p>This domain is for use in illustrative examples in documents. You may use this
+				 domain in literature without prior coordination or asking for permission.</p>,
+				 <p><a href="https://www.iana.org/domains/example">More information...</a></p>]
+
+				>>> soup.a['href']
+				'https://www.iana.org/domains/example'
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			Gather all links from <a href="http://example.webscraping.com">http://example.webscraping.com</a>
+
+			<pre><code class="plain" data-trim>
+				#
+				/places/default/user/register?_next=/places/default/index
+				/places/default/user/login?_next=/places/default/index
+				/places/default/index
+				/places/default/search
+				/places/default/view/Afghanistan-1
+				/places/default/view/Aland-Islands-2
+				/places/default/view/Albania-3
+				/places/default/view/Algeria-4
+				/places/default/view/American-Samoa-5
+				/places/default/view/Andorra-6
+				/places/default/view/Angola-7
+				/places/default/view/Anguilla-8
+				/places/default/view/Antarctica-9
+				/places/default/view/Antigua-and-Barbuda-10
+				/places/default/index/1
+			</code></pre>
+		</section>
+
+		<section>
+			<pre><code class="python" data-trim>
+                for a in soup.find_all('a'):
+                    print(a['href'])
+            </code></pre>
+		</section>
+
+		<section>
+			<a href="https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urljoin"><code>urllib.parse.urljoin</code></a>
+			<pre><code class="python" data-trim>
+				>>> import urllib.urlparse
+				>>> urllib.parse.urljoin('http://example.webscraping.com/', '/places/default/view/Afghanistan-1')
+				http://example.webscraping.com/places/default/view/Afghanistan-1'
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>HTML id attribute</h3>
+			<pre><code class="python" data-trim>
+				>>> results = soup.find(id='results')
+				>>> results.find_all('a')
+				[<a href="/places/default/view/Afghanistan-1"><img src="/places/static/images/flags/af.png"/> Afghanistan</a>,
+				 <a href="/places/default/view/Aland-Islands-2"><img src="/places/static/images/flags/ax.png"/> Aland Islands</a>,
+				 <a href="/places/default/view/Albania-3"><img src="/places/static/images/flags/al.png"/> Albania</a>,
+				 <a href="/places/default/view/Algeria-4"><img src="/places/static/images/flags/dz.png"/> Algeria</a>,
+				 <a href="/places/default/view/American-Samoa-5"><img src="/places/static/images/flags/as.png"/> American Samoa</a>,
+				 <a href="/places/default/view/Andorra-6"><img src="/places/static/images/flags/ad.png"/> Andorra</a>,
+				 <a href="/places/default/view/Angola-7"><img src="/places/static/images/flags/ao.png"/> Angola</a>,
+				 <a href="/places/default/view/Anguilla-8"><img src="/places/static/images/flags/ai.png"/> Anguilla</a>,
+				 <a href="/places/default/view/Antarctica-9"><img src="/places/static/images/flags/aq.png"/> Antarctica</a>,
+				 <a href="/places/default/view/Antigua-and-Barbuda-10"><img src="/places/static/images/flags/ag.png"/> Antigua and Barbuda</a>]
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			Gather all links to states on a page
+			<pre><code class="plain" data-trim>
+				http://example.webscraping.com/places/default/view/Afghanistan-1
+				http://example.webscraping.com/places/default/view/Aland-Islands-2
+				http://example.webscraping.com/places/default/view/Albania-3
+				http://example.webscraping.com/places/default/view/Algeria-4
+				http://example.webscraping.com/places/default/view/American-Samoa-5
+				http://example.webscraping.com/places/default/view/Andorra-6
+				http://example.webscraping.com/places/default/view/Angola-7
+				http://example.webscraping.com/places/default/view/Anguilla-8
+				http://example.webscraping.com/places/default/view/Antarctica-9
+				http://example.webscraping.com/places/default/view/Antigua-and-Barbuda-10
+			</code></pre>
+		</section>
+
+		<section>
+			<pre><code class="python" data-trim>
+				BASE_PATH = 'http://example.webscraping.com/'
+				results = soup.find(id="results")
+				for a in results.find_all('a'):
+					print(urllib.parse.urljoin(BASE_PATH, a['href']))
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			Create a record about each country.
+			<pre><code class="python" data-trim>
+				>>> scrape_country('http://example.webscraping.com/places/default/view/Afghanistan-1')
+				{'country': 'Afghanistan', 'population': 29121286}
+			</code></pre>
+
+			Hint:
+			<pre><code class="python" data-trim>
+				soup.find(id='places_country__row').find('td', class_='w2p_fw').get_text()
+			</code></pre>
+		</section>
+
+		<section>
+			<pre><code class="python" data-trim>
+			def scrape_country(url):
+			    r = requests.get(url)
+			    s = BS(r.text)
+			    country = s.find(id='places_country__row').find('td', class_='w2p_fw').get_text()
+			    population = s.find(id='places_population__row').find('td', class_='w2p_fw').get_text()
+			    population = int(population.replace(',', ''))
+			    return {'country': country, 'population': population}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			Scrape all pages, scrape each country and store the list of all records to json.
+		</section>
+
+		<section>
+			<h1>End</h1>
+		</section>
+
+	</div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        history: true,
+	    pdfSeparateFragments: false,
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>

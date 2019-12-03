@@ -1,0 +1,692 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Functions</title>
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/solarized.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<style>
+		.container {
+			display: flex;
+		}
+
+		.col {
+			flex: 1;
+		}
+	</style>
+
+	<!-- Printing and PDF exports -->
+	<script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+<body>
+
+<div class="reveal">
+	<div class="slides">
+		<section>
+			<img src="img/engeto.png">
+			<h1>7. Function scopes & Inputs</h1>
+		</section>
+
+		<section>
+			<h1>
+				Last lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3>Function</h3>
+			<ul>
+				<li>Named block of code</li>
+				<li>Accepts arguments</li>
+				<li>Can return result</li>
+			</ul>
+
+		</section>
+
+		<section>
+			<h3>Function</h3>
+			<pre><code class="python" data-trim>
+                def add_numbers(number_1, number_2):
+                    result = number_1 + number_2
+                    return result
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> add_numbers(4, 6)
+				10
+				>>> add_numbers(1, 2)
+				3
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Function without return</h3>
+			<pre><code class="python" data-trim>
+                def add_year(data_dict, year):
+                    data_dict['year'] = year
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> data = {'movie': 'Joker'}
+				>>> add_year(data, 2019)
+				>>> data
+				{'movie': 'Joker', 'year': 2019}
+			</code></pre>
+
+		</section>
+
+		<section>
+			<h3>Function without arguments and without return</h3>
+			<pre><code class="python" data-trim>
+                def print_separator():
+                    print('-' * 80)
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>More complex function</h3>
+			<pre><code class="python" data-trim>
+                def sum_positive(numbers):
+                    total = 0
+                    for number in numbers:
+                        if number > 0:
+                            total += number
+                    return total
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> sum_positive([1, 0, -5, 4, -10, 3])
+				8
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Error in function</h3>
+			<pre><code class="python" data-trim>
+                def sum_positive(numbers):
+                    total = 0
+                    for number in numbers:
+                        if number > 0:
+                            total += number
+                    return total
+
+                number = 42
+                sum_positive(number)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+                $ python3 error_in_function.py
+                Traceback (most recent call last):
+                  File "error_in_function.py", line 9, in &lt;module&gt;
+                    sum_positive(number)
+                  File "error_in_function.py", line 3, in sum_positive
+                    for number in numbers:
+                TypeError: 'int' object is not iterable
+            </code></pre>
+
+		</section>
+
+
+		<section class="fragments">
+			<h3>Collection assignment</h3>
+			<pre><code class="python" data-trim>
+				>>> a, b, c = (1, 2, 3)
+				>>> a
+				1
+				>>> b
+				2
+				>>> c
+				3
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> a, *b = (1, 2, 3)
+				>>> a
+				1
+				>>> b
+				[2, 3]
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> a, *b, c = (1, 2, 3, 4, 5)
+				>>> a
+				1
+				>>> b
+				[2, 3, 4]
+				>>> c
+				5
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Import</h3>
+			<pre><code class="python" data-trim>
+				>>> import random
+				>>> random.random()
+				0.6914667260222296
+				>>> random.randint(10, 20)
+				17
+				>>> import string
+				>>> random.choice(string.ascii_letters)
+				'Q'
+			</code></pre>
+			<a href="https://docs.python.org/3/library/random.html">https://docs.python.org/3/library/random.html</a>
+			<a href="https://docs.python.org/3/library/string.html">https://docs.python.org/3/library/string.html</a>
+
+		</section>
+
+		<section>
+			<h3>Special characters</h3>
+			<ul>
+				<li>'\n' - newline</li>
+				<li>'\t' - tabulator</li>
+				<li>'\r' - carriage return</li>
+			</ul>
+			<pre><code class="python" data-trim>
+			>>> print('This is the first line\nAnd this is the second line')
+			This is the first line
+			And this is the second line
+			>>> print('This is just symbol backslash \\')
+			This is just symbol backslash \
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>List comprehension</h3>
+
+			<pre><code class="python" data-trim>
+				powers = []
+				for x in range(10):
+					powers.append(x ** 2)
+			</code></pre>
+			<pre><code class="python" data-trim>
+			[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				powers = [x ** 2 for x in range(10)]
+			</code></pre>
+
+		</section>
+
+		<section class="fragments">
+			<h3>Dict comprehension</h3>
+
+			<pre><code class="python" data-trim>
+				powers = {}
+				for x in range(10):
+					powers[x] = x ** 2
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				{0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25, 6: 36, 7: 49, 8: 64, 9: 81}
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				powers = {x: x ** 2 for x in range(10)}
+			</code></pre>
+
+		</section>
+
+		<section>
+			<h1>
+				Today's lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3>Scopes</h3>
+			<pre><code class="python" data-trim>
+				>>> name = 'John'
+				>>> def func():
+				...     print(name)
+				>>> func()
+				John
+
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Scopes</h3>
+			<pre><code class="python" data-trim>
+				>>> def func():
+				...     name = 'John'
+				...     print(name)
+				>>> print(name, 'Smith')
+				Traceback (most recent call last):
+				  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+				NameError: name 'name' is not defined
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Scopes</h3>
+			<img src="img/scopes.png">
+		</section>
+
+		<section>
+			<h3>Built-in scope</h3>
+			<ul>
+				<li><a href="https://docs.python.org/3/library/stdtypes.html">Built-in types</a> </li>
+				<li><a href="https://docs.python.org/3/library/functions.html">Built-in functions</a> </li>
+			</ul>
+
+			<pre><code class="python" data-trim>
+				>>> import pprint
+				>>> pprint.pprint(__builtins__.__dict__)
+				{'ArithmeticError': &lt;class 'ArithmeticError'&gt;,
+				 'AssertionError': &lt;class 'AssertionError'&gt;,
+				 'AttributeError': &lt;class 'AttributeError'&gt;,
+				...
+				 'abs': &lt;built-in function abs&gt;,
+				 'all': &lt;built-in function all&gt;,
+				 'any': &lt;built-in function any&gt;,
+				...
+				 'tuple': &lt;class 'tuple'&gt;,
+				 'type': &lt;class 'type'&gt;,
+				 'vars': &lt;built-in function vars&gt;,
+				 'zip': &lt;class 'zip'&gt;}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Global</h3>
+			<pre><code class="python" data-trim>
+			name = 'John'
+
+			def print_name():
+				print(name)
+
+			print_name()
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				John
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Global</h3>
+			<pre><code class="python" data-trim>
+			name = 'John'
+
+			def print_name():
+				print(name)
+
+			print_name()
+			name = 'Bob'
+			print_name()
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				John
+				Bob
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Global</h3>
+			<pre><code class="python" data-trim>
+			name = 'John'
+
+			def print_name():
+				name = 'Bob'
+				print(name)
+
+			print_name()
+			print(name)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				Bob
+				John
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Global</h3>
+			<pre><code class="python" data-trim>
+			name = 'John'
+
+			def print_name():
+				name = 'Bob'
+				print('Locals:', locals())
+				print('Globals:', globals())
+				print(name)
+
+			print_name()
+			print(name)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				Locals: {'name': 'Bob'}
+				Globals {
+					'__name__': '__main__',
+					'__builtins__': &lt;module 'builtins' (built-in)&gt;,
+					'__file__': '/home/psebek/projects/engeto/07/global.py',
+					'name': 'John',
+					'print_name': &lt;function print_name at 0x7f8751945ef0&gt;
+					...
+				}
+				Bob
+				John
+			</code></pre>
+		</section>
+
+
+		<section>
+			<h3>Global</h3>
+			<pre><code class="python" data-trim>
+			name = 'John'
+
+			def print_name():
+				global name # <---- global keyword
+				name = 'Bob'
+				print(name)
+
+			print_name()
+			print(name)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				Bob
+				Bob
+			</code></pre>
+		</section>
+
+
+		<section>
+			<h3>Nested functions</h3>
+			<pre><code class="python" data-trim>
+            import random
+
+            def wrapper():
+                start = random.randint(1, 5)
+                end = random.randint(5, 10)
+                print('start = ', start, ', end = ', end)
+                def inner():
+                    return random.randint(start, end)
+                return inner
+
+            random_limits = wrapper()
+            print('#' * 20)
+            print(random_limits())
+            print('-' * 20)
+            print(random_limits())
+            </code></pre>
+
+			<pre><code data-trim>
+                start =  3, end = 8
+                ####################
+                6
+                --------------------
+                3
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Nested functions</h3>
+			<pre><code class="python" data-trim>
+                import random
+
+                def wrapper():
+                    start = random.randint(1, 5)
+                    end = random.randint(5, 10)
+                    print('start = ', start)
+                    print('end = ', end)
+
+                    def inner():
+                        nonlocal start
+                        nonlocal end
+                        start = end = 12
+                        return random.randint(start, end)
+
+                    return inner
+
+
+                random_limits = wrapper()
+                print('#' * 20)
+                print(random_limits())
+                print('-' * 20)
+                print(random_limits())
+            </code></pre>
+
+			<pre><code data-trim>
+				start =  2
+				end =  5
+				####################
+				12
+				--------------------
+				12
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Function arguments</h3>
+
+			<pre><code class="python" data-trim>
+			>>> def function(argument_1, argument_2):
+			...     print(argument_1, argument_2)
+			>>> function(1, 2)
+			1 2
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>Keyword arguments</h3>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> def function(argument, default_argument = 2):
+				...     print(argument, default_argument)
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(1)
+				1 2
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(1, 3)
+				1 3
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(1, default_argument = 4)
+				1 4
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(argument = 2, default_argument = 5)
+				2 5
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(default_argument = 5, argument = 3)
+				3 5
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>Variable number of arguments *</h3>
+			<pre><code class="python" data-trim>
+				>>> def function(*args):
+				...     print(args)
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(1, 2, 3)
+				(1, 2, 3)
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function()
+				()
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> l = [1, 2, 3]
+				>>> function(*l)
+				(1, 2, 3)
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>Variable number of keyword arguments **</h3>
+			<pre><code class="python" data-trim>
+				>>> def function(**kwargs):
+				...     print(kwargs)
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function(a = 1, b = 2)
+				{'a': 1, 'b': 2}
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> function()
+				{}
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> arguments = {'c': 3, 'd': 4}
+				>>> function(**arguments)
+				{'c': 3, 'd': 4}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Ultimate form of arguments</h3>
+			<pre><code class="python" data-trim>
+				>>> def function(a, b, *args, default = None, **kwargs):
+				...     print(a, b, args, default, kwargs)
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> function(1, 2, 3, 4, 5, key = 'KEY')
+				1 2 (3, 4, 5) None {'key': 'KEY'}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Never use mutables as defaults</h3>
+			<pre><code class="python" data-trim>
+				>>> def append(item, l = []):
+				...     l.append(item)
+				...     return l
+
+				>>> i = append(1)
+				>>> print(i)
+				[1]
+				>>> j = append(2)
+				>>> print(j)
+				[1, 2]
+				>>> print(i)
+				[1, 2]
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Never use mutables as defaults</h3>
+			<pre><code class="python" data-trim>
+				>>> def append(item, l = None):
+				...     if l is None:
+				...         l = []
+				...     l.append(item)
+				...     return l
+
+				>>> i = append(1)
+				>>> print(i)
+				[1]
+				>>> j = append(2)
+				>>> print(j)
+				[2]
+				>>> print(i)
+				[1]
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>Exercises</h1>
+		</section>
+
+		<section>
+			<h3>maximum</h3>
+			<ul>
+				<li>Variable number of inputs</li>
+				<li>Returns maximum item, if empty sequence return None</li>
+			</ul>
+			<pre><code class="python" data-trim>
+			>>> maximum(1, 2, 3, 4)
+			4
+			>>> maximum()
+			None
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>maximum with default</h3>
+			<ul>
+				<li>Variable number of inputs, default keyword argument</li>
+				<li>Returns maximum item, if empty sequence return default</li>
+			</ul>
+			<pre><code class="python" data-trim>
+			>>> maximum(1, 2, 3, 4, default = -1)
+			4
+			>>> maximum()
+			None
+			>>> maximum(default = -1)
+			-1
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>maximum with default and key</h3>
+			<ul>
+				<li>Variable number of inputs, keyword argument key</li>
+				<li>Returns maximum item according to key function if provided</li>
+			</ul>
+			<pre><code class="python" data-trim>
+			>>> maximum('Aš', 'Brno', 'Pardubice', 'Praha')
+			'Praha'
+			>>> maximum('Aš', 'Brno', 'Pardubice', 'Praha', key = len)
+			'Pardubice'
+			</code></pre>
+			<pre><code class="python" data-trim>
+			def identity(item):
+				return item
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>End</h1>
+		</section>
+
+	</div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        history: true,
+	    pdfSeparateFragments: false,
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,676 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>9. Engeto</title>
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/solarized.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<style>
+		.container {
+			display: flex;
+		}
+
+		.col {
+			flex: 1;
+		}
+	</style>
+
+	<!-- Printing and PDF exports -->
+	<script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+<body>
+
+<div class="reveal">
+	<div class="slides">
+		<section>
+			<img src="img/engeto.png">
+			<h1>9. Errors & Debugging</h1>
+		</section>
+
+		<section>
+			<h1>
+				Share your code
+			</h1>
+		</section>
+
+
+		<section>
+			<h1>
+				Last lesson
+			</h1>
+		</section>
+
+		<section class="fragments">
+			<h3>String formatting</h3>
+			<pre><code class="python" data-trim>
+				>>> name = 'Guido'
+				>>> surname = 'van Rossum'
+				>>> age = 63
+				>>> print('Name:', name, ', surname:', surname, ', age:', age, '!')
+				Name: Guido , surname: van Rossum , age: 63 !
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> print('Name: ' + name + ', surname: ' + surname + ', age: ' + str(age) + '!')
+				Name: Guido, surname: van Rossum, age: 63!
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+			>>> print(f'Name: {name}, surname: {surname}, age: {age}!')
+			Name: Guido, surname: van Rossum, age: 63!
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>f-strings — width, alignment and fill</h3>
+			<a href="https://realpython.com/python-f-strings/">https://realpython.com/python-f-strings/</a>
+			<pre><code class="python" data-trim>
+				>>>> f'{name:10}'
+				'Guido     '
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>>> f'{name:>10}'
+				'     Guido'
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				>>>> f'{name:^10}'
+				'  Guido   '
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>>> f'{name:.^10}'
+				'..Guido...'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> width = 10
+				>>>> f'{name:.^{width}}'
+				'..Guido...'
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>f-strings — number format </h3>
+
+			<pre><code class="python" data-trim>
+				>>> price = 123.4567890
+				>>> f'{price}'
+				'123.456789'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> f'{price:.2}'
+				'1.2e+02'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> f'{price:.2f}'
+				'123.46'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> f'{price:e}'
+				'1.234568e+02'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> f'{price:+.2f}'
+				'+123.46'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> negative_price = -price
+				>>> f'{price: .2f} vs. {negative_price: .2f}'
+				' 123.46 vs. -123.46'
+			</code></pre>
+
+		</section>
+
+		<section>
+			<h3>f-strings — expressions</h3>
+
+			<pre><code class="python" data-trim>
+				>>> f'Surname length: {len(surname)}'
+				'Surname length: 10'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> f'lower full name: {name.lower()} {surname.lower()}'
+				'lower full name: guido van rossum'
+			</code></pre>
+
+			<span class="fragment">Don't complicate f-strings</span>
+			<pre class="fragment"><code class="python" data-trim>
+				>>> import random
+				>>> f'Over threshold: {"yes" if random.random() > 0.3 else "no"}'
+				'Over threshold: yes'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> import random
+				>>> over_threshold = 'yes' if random.random() > 0.3 else 'no'
+				>>> f'Over threshold: {over_threshold}'
+				'Over threshold: no'
+			</code></pre>
+		</section>
+
+		<section>
+			<h3><code>.format()</code></h3>
+
+			<pre><code class="python" data-trim>
+				>>> 'Name: {}, surname: {}'.format(name, surname)
+				'Name: Guido, surname: van Rossum'
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> 'Name: {name}, surname: {surname}'.format(name = name, surname = surname)
+				'Name: Guido, surname: van Rossum'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> credentials = {'name': 'Guido', 'surname': 'van Rossum'}
+				>>> f'Name: {credentials["name"]}, surname: {credentials["surname"]}.'
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> 'Name: {name}, surname: {surname}'.format(**credentials)
+				'Name: Guido, surname: van Rossum'
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>Files</h1>
+		</section>
+
+		<section>
+			<h3>File path</h3>
+			Windows
+			<pre><code class="python" data-trim>
+			C:\Users\Bob\Documents\gifts.txt
+			</code></pre>
+			Linux + Mac
+			<pre><code class="python" data-trim>
+			/home/Bob/Documents/gifts.txt
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Absolute vs. relative path</h3>
+			<pre><code class="bash" data-trim>
+				/home/Bob $ pwd
+				/home/Bob
+				/home/Bob $ cd Documents
+				/home/Bob/Documents $ cat gifts.txt # relative path
+				gifts file content
+				/home/Bob/Documents $ cat /home/Bob/Documents/gitfs.txt # absolute path
+				gifts file content
+				/home/Bob/Documents $ cd .. # parent directory
+				/home/Bob $ cat Documents/gifts.txt # relative path
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>File open, read and close</h3>
+			<pre class="fragment strike"><code class="python" data-trim>
+			file = open('gifts.txt')
+			content = file.read()
+			print(content)
+			file.close()
+			</code></pre>
+
+			<span class="fragment">Always use context manager</span>
+			<pre class="fragment"><code class="python" data-trim>
+            >>> with open('gifts.txt') as file:
+            ...     content = file.read()
+            ... print(content)
+            VR - 1000 USD
+            JetPack - 30000 USD
+            Book - 30 USD
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Open non-existent file</h3>
+			<pre><code class="python" data-trim>
+			>>> with open('g.txt.') as file:
+			...     content = file.read()
+			...
+			Traceback (most recent call last):
+			  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+			FileNotFoundError: [Errno 2] No such file or directory: 'g.txt.'
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>File write</h3>
+			<pre><code class="python" data-trim>
+			with open('gifts.txt', mode='w') as file:
+				file.write('Overwriting content of the file')
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Open for writing to non-existeng file</h3>
+			<pre><code class="python" data-trim>
+				>>> with open('g.txt', 'w') as file:
+				...     file.write('Hello world')
+				...
+				11
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>File open modes</h3>
+			<dl style="font-size:0.7em">
+				<dt><code>'r'</code></dt>
+				<dd>open for reading text, default</dd>
+
+				<dt><code>'w'</code></dt>
+				<dd>truncate and open for writing text</dd>
+
+				<dt><code>'a'</code></dt>
+				<dd>open for writing text, append at the end</dd>
+
+				<dt><code>'r+'</code></dt>
+				<dd>open for reading and writing text</dd>
+
+				<dt><code>'w+'</code></dt>
+				<dd>truncate and open for reading and writing text</dd>
+
+				<dt><code>'rb'</code></dt>
+				<dd>open for reading bytes</dd>
+
+				<dt><code>'wb'</code></dt>
+				<dd>truncate and open for writing bytes</dd>
+			</dl>
+		</section>
+
+		<section>
+			<h3>Reading file line by line</h3>
+			<pre><code class="python" data-trim>
+			>>> with open('gifts.txt') as file:
+			...     for line in file:
+			...         print('#', line, end='')
+			...
+			# VR - 1000 USD
+			# JetPack - 30000 USD
+			# Book - 30 USD
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>
+				Today's lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3>Errors</h3>
+			<pre><code class="python" data-trim>
+				>>> selection = input('Choose an option from (1, 2, 3): ')
+				Choose an option from (1, 2, 3): 1
+				>>> index = selection - 1
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				Traceback (most recent call last):
+				  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+				TypeError: unsupported operand type(s) for -: 'str' and 'int'
+			</code></pre>
+			<span class="fragment"><a href="https://docs.python.org/3/tutorial/errors.html">Tutorial errors</a></span>
+		</section>
+
+		<section>
+			<h3>try-except</h3>
+			<pre><code class="python" data-trim>
+            try:
+                surveilled code
+            except:
+                handled exception
+            </code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+                selection = input('Choose an option from (1, 2, 3): ')
+                try:
+                    index = selection -1
+                except TypeError:
+                    print('You tried to count with wrong types!')
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>try-except</h3>
+			<pre><code class="python" data-trim>
+				selection = input('Choose an option from (1, 2, 3): ')
+				try:
+					index = selection -1
+				except TypeError as exc:
+					print('You tried to count with wrong types! Exception:', exc)
+            </code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				You tried to count with wrong types! Exception: unsupported operand type(s) for -: 'str' and 'int'
+			</code></pre>
+		</section>
+
+
+		<section>
+			<h3>try-except more exceptions</h3>
+			<pre><code class="python" data-trim>
+                try:
+                    index = selection -1
+                except TypeError:
+                    print('You tried to count with wrong types!')
+                except NameError:
+                    print('Some variable must be missing'
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>try-except more exceptions 2</h3>
+			<pre><code class="python" data-trim>
+                try:
+                    index = selection -1
+                except (TypeError, NameError):
+                    print('Something went wrong with the computation')
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>try-except-else</h3>
+			<pre><code class="python" data-trim>
+                try:
+                    index = selection -1
+                except TypeError:
+                    print('You tried to count with wrong types!')
+                else:
+                    print('Everything went as expected')
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>try-except-else-finally</h3>
+			<pre><code class="python" data-trim>
+                try:
+                    index = selection -1
+                except TypeError:
+                    print('You tried to count with wrong types!')
+                else:
+                    print('Everything went as expected')
+                finally:
+                    print('This is performed no matter what')
+            </code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+                try:
+                    index = selection -1
+                finally:
+                    print('This is performed no matter what')
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>try-except summary</h3>
+			<pre><code class="python" data-trim>
+				try except
+				try except except ...
+				try except else
+				try finally
+				try except else finally
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exceptions</h3>
+			<a href="https://docs.python.org/3/library/exceptions.html">Built-in Exceptions</a>
+			<pre><code class="python" data-trim>
+                BaseException
+                 +-- SystemExit
+                 +-- KeyboardInterrupt
+                 +-- GeneratorExit
+                 +-- Exception
+                      +-- StopIteration
+                      +-- StopAsyncIteration
+                      +-- ArithmeticError
+                      |    +-- FloatingPointError
+                      |    +-- OverflowError
+                      |    +-- ZeroDivisionError
+                      +-- AssertionError
+                      +-- AttributeError
+                      +-- BufferError
+                      +-- EOFError
+                      +-- ImportError
+                      |    +-- ModuleNotFoundError
+                      +-- LookupError
+                      |    +-- IndexError
+                      |    +-- KeyError
+                      +-- MemoryError
+                      +-- NameError
+                      |    +-- UnboundLocalError
+                      +-- OSError
+                      |    +-- BlockingIOError
+                      |    +-- ChildProcessError
+                      |    +-- ConnectionError
+                      |    |    +-- BrokenPipeError
+                      |    |    +-- ConnectionAbortedError
+                      |    |    +-- ConnectionRefusedError
+                      |    |    +-- ConnectionResetError
+                      |    +-- FileExistsError
+                      |    +-- FileNotFoundError
+                      |    +-- InterruptedError
+                      |    +-- IsADirectoryError
+                      |    +-- NotADirectoryError
+                      |    +-- PermissionError
+                      |    +-- ProcessLookupError
+                      |    +-- TimeoutError
+                      +-- ReferenceError
+                      +-- RuntimeError
+                      |    +-- NotImplementedError
+                      |    +-- RecursionError
+                      +-- SyntaxError
+                      |    +-- IndentationError
+                      |         +-- TabError
+                      +-- SystemError
+                      +-- TypeError
+                      +-- ValueError
+                      |    +-- UnicodeError
+                      |         +-- UnicodeDecodeError
+                      |         +-- UnicodeEncodeError
+                      |         +-- UnicodeTranslateError
+                      +-- Warning
+                           +-- DeprecationWarning
+                           +-- PendingDeprecationWarning
+                           +-- RuntimeWarning
+                           +-- SyntaxWarning
+                           +-- UserWarning
+                           +-- FutureWarning
+                           +-- ImportWarning
+                           +-- UnicodeWarning
+                           +-- BytesWarning
+                           +-- ResourceWarning
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Raising an exception</h3>
+			<pre><code class="python" data-trim>
+                def get_domain_from_email(email):
+                    if '@' not in email:
+                        raise ValueError(f'Email \'{email}\' does not contain @.')
+                    ...
+            </code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> get_domain_from_email('text')
+				Traceback (most recent call last):
+				  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+				  File "&lt;stdin&gt;", line 3, in get_domain_from_email
+				ValueError: Email 'text' does not contain @.
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> try:
+				...     get_domain_from_email('text')
+				... except ValueError as exc:
+				...     print('Oops! Something went wrong. Exception:', exc)
+				...
+				Oops! Something went wrong. Exception: Email text does not contain @.
+			</code></pre>
+		</section>
+
+		<section>
+			<h3><strong>E</strong>asier <strong>A</strong>sk for <strong>F</strong>orgiveness than <strong>P</strong>ermission</h3>
+
+			<pre class="fragment strike"><code class="python" data-trim>
+                d = {...}
+                if key in d:
+                    return d[key] ** 2
+                else:
+                    return None
+            </code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+                d = {...}
+                try:
+                    return d[key] ** 2
+                except KeyError:
+                    return None
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Debugging - frame</h3>
+			<img src="img/frame.png">
+		</section>
+
+
+		<section>
+			<h3>Debugging - call stack</h3>
+			<img src="img/call_stack.png" height="500">
+		</section>
+
+		<section>
+			<h1>Exercises</h1>
+		</section>
+
+		<section>
+			<h3>Debugging</h3>
+			<pre><code class="python" data-trim>
+                def count(sequence, target=None):
+                    if not target:
+                        return len(sequence)
+                    else:
+                        count = 0
+                        for item in sequence:
+                            count += item == target
+                        return count
+
+
+                def my_sum(sequence):
+                    result = 0
+                    for i in sequence:
+                        result += i
+                    return result
+
+
+                def avg(sequence):
+                    return my_sum(sequence) / count(sequence)
+
+                avg([1, 2, 3, 4, 5, 'a'])
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>avg - empty</h3>
+			Make following code return <code>0.0</code> when <code>sequence</code> is empty.
+			<pre><code class="python" data-trim>
+				>>> def avg(sequence):
+				...     return sum(sequence) / len(sequence)
+				...
+				>>> avg([])
+				Traceback (most recent call last):
+				  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+				  File "&lt;stdin&gt;", line 2, in avg
+				ZeroDivisionError: division by zero
+            </code></pre>
+			<pre><code class="python" data-trim>
+				>>> avg([])
+				0.0
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>selection - int type</h3>
+			<pre><code class="python" data-trim>
+				 >>> selection = int(input('Select an option from (1, 2, 3): '))
+				Select an option from (1, 2, 3): one
+				Traceback (most recent call last):
+				  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+				ValueError: invalid literal for int() with base 10: 'one'
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				Please insert a number, 'one' is not a number
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>interactive cp - <code>FileNotFoundError</code></h3>
+			<pre><code class="python" data-trim>
+			$ python interactive_copy.py
+			Read file: asdfa
+			Traceback (most recent call last):
+			  File "interactive_copy.py", line 5, in <module>
+				with open(read_file_path) as file:
+			FileNotFoundError: [Errno 2] No such file or directory: 'asdfa'
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				$ python interactive_copy.py
+				Read file: asdfa
+				FileNotFoundError: [Errno 2] No such file or directory: 'asdfa'
+				Read file: gifts.txt
+				Write file: ...
+			</code></pre>
+
+		</section>
+
+		<section>
+			<h1>End</h1>
+		</section>
+
+	</div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        history: true,
+	    pdfSeparateFragments: false,
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>

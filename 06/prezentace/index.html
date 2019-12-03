@@ -1,0 +1,478 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Functions</title>
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/solarized.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<style>
+		.container {
+			display: flex;
+		}
+
+		.col {
+			flex: 1;
+		}
+	</style>
+
+	<!-- Printing and PDF exports -->
+	<script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+<body>
+
+<div class="reveal">
+	<div class="slides">
+		<section>
+			<img src="img/engeto.png">
+			<h1>6. Functions</h1>
+		</section>
+
+		<section>
+			<h1>
+				Last lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3>for</h3>
+			Pro každý prvek x z collection prováděj kód
+
+			<pre><code class="python" data-trim>
+				for x in collection:
+					process(x)
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>for example</h3>
+
+			<pre><code class="python" data-trim>
+				>>> for x in ('alfa', 'beta', 'gamma'):
+				...     print(x)
+				...
+				alfa
+				beta
+				gamma
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>for</h3>
+
+			<pre><code class="python" data-trim>
+				for x in 'abc':
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				for x in ['alfa', 'beta', 'gamma']:
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				for x in {'alfa', 'beta', 'gamma'}:
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				for x in {'alfa': 0, 'beta': 1, 'gamma': 2}:
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>range</h3>
+
+			<pre><code class="python" data-trim>
+				for x in (0, 1, 2, 4, 5, 6, 7, 8, 9):
+					print(x)
+			</code></pre>
+			<pre><code class="python" data-trim>
+				for x in range(10):
+					print(x)
+			</code></pre>
+
+		</section>
+
+		<section class="fragments">
+			<h3>range</h3>
+
+			<pre><code class="python" data-trim>
+				range(stop)
+				range(start, stop)
+				range(start, stop, step)
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				range(5)
+			</code></pre>
+			<pre><code class="python" data-trim>
+				0, 1, 2, 3, 4
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				range(5, 10)
+			</code></pre>
+			<pre><code class="python" data-trim>
+				5, 6, 7, 8, 9
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				range(5, 10, 2)
+			</code></pre>
+			<pre><code class="python" data-trim>
+				5, 7, 9
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				range(10, 5, -1)
+			</code></pre>
+			<pre><code class="python" data-trim>
+				10, 9, 8, 7, 6
+			</code></pre>
+
+		</section>
+
+		<section>
+			<h1>
+				Today's lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3>Function</h3>
+			<ul>
+				<li>Named block of code</li>
+				<li>Accepts arguments</li>
+				<li>Can return result</li>
+			</ul>
+
+		</section>
+
+		<section>
+			<h3>Function</h3>
+			<pre><code class="python" data-trim>
+                def add_numbers(number_1, number_2):
+                    result = number_1 + number_2
+                    return result
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> add_numbers(4, 6)
+				10
+				>>> add_numbers(1, 2)
+				3
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Function without return</h3>
+			<pre><code class="python" data-trim>
+                def add_year(data_dict, year):
+                    data_dict['year'] = year
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> data = {'movie': 'Joker'}
+				>>> add_year(data, 2019)
+				>>> data
+				{'movie': 'Joker', 'year': 2019}
+			</code></pre>
+
+		</section>
+
+		<section>
+			<h3>Function without arguments and without return</h3>
+			<pre><code class="python" data-trim>
+                def print_separator():
+                    print('-' * 80)
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>More complex function</h3>
+			<pre><code class="python" data-trim>
+                def sum_positive(numbers):
+                    total = 0
+                    for number in numbers:
+                        if number > 0:
+                            total += number
+                    return total
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> sum_positive([1, 0, -5, 4, -10, 3])
+				8
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Error in function</h3>
+			<pre><code class="python" data-trim>
+                def sum_positive(numbers):
+                    total = 0
+                    for number in numbers:
+                        if number > 0:
+                            total += number
+                    return total
+
+                number = 42
+                sum_positive(number)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+                $ python3 error_in_function.py
+                Traceback (most recent call last):
+                  File "error_in_function.py", line 9, in &lt;module&gt;
+                    sum_positive(number)
+                  File "error_in_function.py", line 3, in sum_positive
+                    for number in numbers:
+                TypeError: 'int' object is not iterable
+            </code></pre>
+
+		</section>
+
+		<section>
+			<h1>Exercises</h1>
+		</section>
+
+		<section>
+			<h3>sum_range</h3>
+			<ol>
+				<li>Arguments: start, stop</li>
+				<li>Return the sum of all numbers in range between start and stop (stop including)</li>
+			</ol>
+
+			<pre><code class="python" data-trim>
+				>>> sum_range(0, 5)
+				15
+				>>> sum_range(5, 10)
+				45
+			</code></pre>
+		</section>
+
+
+<!--		<section>-->
+<!--			<h3>average</h3>-->
+<!--			<ol>-->
+<!--				<li>Arguments: list of numbers</li>-->
+<!--				<li>Return the average of numbers</li>-->
+<!--			</ol>-->
+
+<!--			<pre><code class="python" data-trim>-->
+<!--				>>> average([1, 2, 3, 4])-->
+<!--				2.5-->
+<!--				>>> average([-5, 10, 9.5, -7])-->
+<!--				1.875-->
+<!--			</code></pre>-->
+<!--		</section>-->
+
+		<section>
+			<h3>is_prime</h3>
+			<ol>
+				<li>Arguments: number</li>
+				<li>Return True if number is prime False otherwise</li>
+			</ol>
+
+			<pre><code class="python" data-trim>
+				>>> is_prime(1)
+				True
+				>>> is_prime(2)
+				True
+				>>> is_prime(3)
+				True
+				>>> is_prime(4)
+				False
+				>>> is_prime(5)
+				True
+				>>> is_prime(6)
+				False
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>sum_prime_range</h3>
+			<ol>
+				<li>Arguments: start, stop</li>
+				<li>Return the sum of all primes in range between start and stop (stop including)</li>
+			</ol>
+
+			<pre><code class="python" data-trim>
+				>>> sum_prime_range(5, 10)
+				12
+				>>> sum_predicate_range(5, 11)
+				23
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Function as an object</h3>
+			<pre><code class="python" data-trim>
+				>>> def add(a, b):
+				... 	return a + b
+
+				>>> new_add = add
+				>>> new_add(4, 5)
+				9
+				>>> add(4, 5)
+				9
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>sum_predicate_range</h3>
+			<ol>
+				<li>Arguments: start, stop, predicate</li>
+				<li>Return the sum of all numbers between start and stop for which predicate is True</li>
+			</ol>
+
+			<pre><code class="python" data-trim>
+				>>> sum_predicate_range(5, 10, is_prime)
+				12
+				>>> sum_predicate_range(5, 11, is_prime)
+				23
+				>>> def is_divisible_by_2(number):
+				...    return number % 2 == 0
+				>>> sum_predicate_range(5, 10, is_divisible_by_2)
+				24
+			</code></pre>
+
+		</section>
+
+		<section class="fragments">
+			<h1>End<span class="fragment">?</span></h1>
+		</section>
+
+		<section class="fragments">
+			<h3>Collection assignment</h3>
+			<pre><code class="python" data-trim>
+				>>> a, b, c = (1, 2, 3)
+				>>> a
+				1
+				>>> b
+				2
+				>>> c
+				3
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> a, *b = (1, 2, 3)
+				>>> a
+				1
+				>>> b
+				[2, 3]
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> a, *b, c = (1, 2, 3, 4, 5)
+				>>> a
+				1
+				>>> b
+				[2, 3, 4]
+				>>> c
+				5
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Import</h3>
+			<pre><code class="python" data-trim>
+				>>> import random
+				>>> random.random()
+				0.6914667260222296
+				>>> random.randint(10, 20)
+				17
+				>>> import string
+				>>> random.choice(string.ascii_letters)
+				'Q'
+			</code></pre>
+			<a href="https://docs.python.org/3/library/random.html">https://docs.python.org/3/library/random.html</a>
+			<a href="https://docs.python.org/3/library/string.html">https://docs.python.org/3/library/string.html</a>
+
+		</section>
+
+		<section>
+			<h3>Special characters</h3>
+			<ul>
+				<li>'\n' - newline</li>
+				<li>'\t' - tabulator</li>
+				<li>'\r' - carriage return</li>
+			</ul>
+			<pre><code class="python" data-trim>
+			>>> print('This is the first line\nAnd this is the second line')
+			This is the first line
+			And this is the second line
+			>>> print('This is just symbol backslash \\')
+			This is just symbol backslash \
+			</code></pre>
+		</section>
+
+		<section class="fragments">
+			<h3>List comprehension</h3>
+
+			<pre><code class="python" data-trim>
+				powers = []
+				for x in range(10):
+					powers.append(x ** 2)
+			</code></pre>
+			<pre><code class="python" data-trim>
+			[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				powers = [x ** 2 for x in range(10)]
+			</code></pre>
+
+		</section>
+
+		<section class="fragments">
+			<h3>Dict comprehension</h3>
+
+			<pre><code class="python" data-trim>
+				powers = {}
+				for x in range(10):
+					powers[x] = x ** 2
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				{0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25, 6: 36, 7: 49, 8: 64, 9: 81}
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				powers = {x: x ** 2 for x in range(10)}
+			</code></pre>
+
+		</section>
+
+	</div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        history: true,
+	    pdfSeparateFragments: false,
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>

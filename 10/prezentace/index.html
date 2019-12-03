@@ -1,0 +1,568 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>10. Engeto</title>
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/solarized.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<style>
+		.container {
+			display: flex;
+		}
+
+		.col {
+			flex: 1;
+		}
+	</style>
+
+	<!-- Printing and PDF exports -->
+	<script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+<body>
+
+<div class="reveal">
+	<div class="slides">
+		<section>
+			<img src="img/engeto.png">
+			<h1>10. Importing</h1>
+		</section>
+
+		<section>
+			<h1>
+				Last lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3>Errors</h3>
+			<pre><code class="python" data-trim>
+				>>> selection = input('Choose an option from (1, 2, 3): ')
+				Choose an option from (1, 2, 3): 1
+				>>> index = selection - 1
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				Traceback (most recent call last):
+				  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+				TypeError: unsupported operand type(s) for -: 'str' and 'int'
+			</code></pre>
+			<span class="fragment"><a href="https://docs.python.org/3/tutorial/errors.html">Tutorial errors</a></span>
+		</section>
+
+		<section>
+			<h3>try-except</h3>
+			<pre><code class="python" data-trim>
+            try:
+                surveilled code
+            except:
+                handled exception
+            </code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+                selection = input('Choose an option from (1, 2, 3): ')
+                try:
+                    index = selection -1
+                except TypeError:
+                    print('You tried to count with wrong types!')
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>try-except</h3>
+			<pre><code class="python" data-trim>
+				selection = input('Choose an option from (1, 2, 3): ')
+				try:
+					index = selection -1
+				except TypeError as exc:
+					print('You tried to count with wrong types! Exception:', exc)
+            </code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				You tried to count with wrong types! Exception: unsupported operand type(s) for -: 'str' and 'int'
+			</code></pre>
+		</section>
+
+
+		<section>
+			<h3>try-except more exceptions</h3>
+			<pre><code class="python" data-trim>
+                try:
+                    index = selection -1
+                except TypeError:
+                    print('You tried to count with wrong types!')
+                except NameError:
+                    print('Some variable must be missing'
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>try-except more exceptions 2</h3>
+			<pre><code class="python" data-trim>
+                try:
+                    index = selection -1
+                except (TypeError, NameError):
+                    print('Something went wrong with the computation')
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>try-except-else</h3>
+			<pre><code class="python" data-trim>
+                try:
+                    index = selection -1
+                except TypeError:
+                    print('You tried to count with wrong types!')
+                else:
+                    print('Everything went as expected')
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>try-except-else-finally</h3>
+			<pre><code class="python" data-trim>
+                try:
+                    index = selection -1
+                except TypeError:
+                    print('You tried to count with wrong types!')
+                else:
+                    print('Everything went as expected')
+                finally:
+                    print('This is performed no matter what')
+            </code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+                try:
+                    index = selection -1
+                finally:
+                    print('This is performed no matter what')
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>try-except summary</h3>
+			<pre><code class="python" data-trim>
+				try except
+				try except except ...
+				try except else
+				try finally
+				try except else finally
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exceptions</h3>
+			<a href="https://docs.python.org/3/library/exceptions.html">Built-in Exceptions</a>
+			<pre><code class="python" data-trim>
+                BaseException
+                 +-- SystemExit
+                 +-- KeyboardInterrupt
+                 +-- GeneratorExit
+                 +-- Exception
+                      +-- StopIteration
+                      +-- StopAsyncIteration
+                      +-- ArithmeticError
+                      |    +-- FloatingPointError
+                      |    +-- OverflowError
+                      |    +-- ZeroDivisionError
+                      +-- AssertionError
+                      +-- AttributeError
+                      +-- BufferError
+                      +-- EOFError
+                      +-- ImportError
+                      |    +-- ModuleNotFoundError
+                      +-- LookupError
+                      |    +-- IndexError
+                      |    +-- KeyError
+                      +-- MemoryError
+                      +-- NameError
+                      |    +-- UnboundLocalError
+                      +-- OSError
+                      |    +-- BlockingIOError
+                      |    +-- ChildProcessError
+                      |    +-- ConnectionError
+                      |    |    +-- BrokenPipeError
+                      |    |    +-- ConnectionAbortedError
+                      |    |    +-- ConnectionRefusedError
+                      |    |    +-- ConnectionResetError
+                      |    +-- FileExistsError
+                      |    +-- FileNotFoundError
+                      |    +-- InterruptedError
+                      |    +-- IsADirectoryError
+                      |    +-- NotADirectoryError
+                      |    +-- PermissionError
+                      |    +-- ProcessLookupError
+                      |    +-- TimeoutError
+                      +-- ReferenceError
+                      +-- RuntimeError
+                      |    +-- NotImplementedError
+                      |    +-- RecursionError
+                      +-- SyntaxError
+                      |    +-- IndentationError
+                      |         +-- TabError
+                      +-- SystemError
+                      +-- TypeError
+                      +-- ValueError
+                      |    +-- UnicodeError
+                      |         +-- UnicodeDecodeError
+                      |         +-- UnicodeEncodeError
+                      |         +-- UnicodeTranslateError
+                      +-- Warning
+                           +-- DeprecationWarning
+                           +-- PendingDeprecationWarning
+                           +-- RuntimeWarning
+                           +-- SyntaxWarning
+                           +-- UserWarning
+                           +-- FutureWarning
+                           +-- ImportWarning
+                           +-- UnicodeWarning
+                           +-- BytesWarning
+                           +-- ResourceWarning
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Raising an exception</h3>
+			<pre><code class="python" data-trim>
+                def get_domain_from_email(email):
+                    if '@' not in email:
+                        raise ValueError(f'Email \'{email}\' does not contain @.')
+                    ...
+            </code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> get_domain_from_email('text')
+				Traceback (most recent call last):
+				  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+				  File "&lt;stdin&gt;", line 3, in get_domain_from_email
+				ValueError: Email 'text' does not contain @.
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				>>> try:
+				...     get_domain_from_email('text')
+				... except ValueError as exc:
+				...     print('Oops! Something went wrong. Exception:', exc)
+				...
+				Oops! Something went wrong. Exception: Email text does not contain @.
+			</code></pre>
+		</section>
+
+		<section>
+			<h3><strong>E</strong>asier <strong>A</strong>sk for <strong>F</strong>orgiveness than <strong>P</strong>ermission</h3>
+
+			<pre class="fragment strike"><code class="python" data-trim>
+                d = {...}
+                if key in d:
+                    return d[key] ** 2
+                else:
+                    return None
+            </code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+                d = {...}
+                try:
+                    return d[key] ** 2
+                except KeyError:
+                    return None
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Debugging - frame</h3>
+			<img src="img/frame.png">
+		</section>
+
+
+		<section>
+			<h3>Debugging - call stack</h3>
+			<img src="img/call_stack.png" height="500">
+		</section>
+
+		<section>
+			<h1>
+				Today's lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3><code>import</code></h3>
+			<pre><code class="python" data-trim>
+				>>> import random
+				>>> random.random()
+				0.16541488247158354
+				>>> from random import randint
+				>>> randint(1, 10)
+				6
+				>>> from random import randint as my_randint
+				>>> my_randint(1, 10)
+				3
+				>>> from random import * # not recommended
+				>>> choice([1, 2, 3])
+				2
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Python standard library</h3>
+			Batteries included <br>
+			<a href="https://docs.python.org/3/library/">Standard library</a>
+		</section>
+
+		<section>
+			<h3><code>os</code></h3>
+			<pre><code class="python" data-trim>
+				>>> import os
+				>>> os.listdir()
+				['prezentace']
+				>>> os.getcwd()
+				'/home/psebek/projects/engeto/10'
+				>>> os.mkdir('test_dir')
+				>>> os.listdir()
+				['test_dir', 'prezentace']
+			</code></pre>
+		</section>
+
+		<section>
+			<h3><code>os.path</code></h3>
+			<pre><code class="python" data-trim>
+				>>> import os.path  # or just os
+				>>> os.path.exists('test_dir')
+				True
+				>>> os.path.isfile('test_dir')
+				False
+				>>> os.path.isdir('test_dir')
+				True
+				>>> path = os.path.join('test_dir', 'sub_folder', 'file.txt')
+				>>> path
+				'test_dir/sub_folder/file.txt'
+				>>> os.path.abspath(path)
+				'/home/psebek/projects/engeto/10/test_dir/sub_folder/file.txt'
+				>>> os.path.basename(path)
+				'file.txt'
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Third-party packages</h3>
+			<a href="https://pypi.org/">PyPI</a>
+		</section>
+
+		<section>
+			<h3>Virtual environment</h3>
+			Solves package versions conflicts <br>
+			<a href="https://docs.python.org/3/tutorial/venv.html">Tutorial venv</a>
+
+			<pre><code class="bash" data-trim>
+				$ python3 -m venv .env
+				$ ls
+				.env
+				$ source .env/bin/activate
+				(.env) $ python --version
+				3.7.5
+			</code></pre>
+		</section>
+
+		<section>
+			<h3><code>pip</code></h3>
+			Installs third-party packages <br>
+			<pre><code class="python" data-trim>
+				(.env) $ pip list
+				Package    Version
+				---------- -------
+				pip        19.1.1
+				setuptools 41.2.0
+				(.env) $ pip install tabulate
+				...
+				Successfully installed tabulate-0.8.6
+				(.env) $ python
+				>>> import tabulate
+				>>> print(tabulate.tabulate([[1, 2], [3, 4]]))
+				-  -
+				1  2
+				3  4
+				-  -
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			<ol>
+				<li>Create virtual environment</li>
+				<li>Install <code>tabulate</code></li>
+				<li>Print table with file/directory and its size using <code>os.path.getsize(path)</code></li>
+			</ol>
+
+			<pre><code class="python" data-trim>
+                $ python my_ls.py
+                -----------  ----
+                compute.py     47
+                helpers.py     59
+                prezentace   4096
+                my_ls.py      150
+                __pycache__  4096
+                -----------  ----
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>Importing own module</h3>
+			<code>helpers.py</code>
+			<pre><code class="python" data-trim>
+				def avg(sequence):
+					return sum(sequence) / len(sequence)
+			</code></pre>
+			<div class="fragment">
+				<code>compute.py</code>
+				<pre><code class="python" data-trim>
+					import helpers
+					print(helpers.avg([1, 2, 3, 4])
+				</code></pre>
+			</div>
+
+			<div class="fragment">
+				<code>terminal</code>
+				<pre><code class="python" data-trim>
+					$ python compute.py
+					2.5
+				</code></pre>
+			</div>
+		</section>
+
+		<section>
+			<h3>Importing own module</h3>
+			<code>helpers.py</code>
+			<pre><code class="python" data-trim>
+				def avg(sequence):
+					return sum(sequence) / len(sequence)
+
+				print('We are in helpers.py')
+				print(avg([1, 2])
+			</code></pre>
+			<div class="fragment">
+				<code>compute.py</code>
+				<pre><code class="python" data-trim>
+					import helpers
+					print('We are in compute.py')
+					print(helpers.avg([1, 2, 3, 4])
+				</code></pre>
+			</div>
+
+			<div class="fragment">
+				<pre><code class="python" data-trim>
+					$ python compute.py
+					We are in helpers.py
+					1.5
+					We are in compute.py
+					2.5
+				</code></pre>
+			</div>
+		</section>
+
+
+		<section>
+			<h3>Importing own module</h3>
+			<code>helpers.py</code>
+			<pre><code class="python" data-trim>
+				def avg(sequence):
+					return sum(sequence) / len(sequence)
+				if __name__ == '__main__': # <---
+					print('We are in helpers.py')
+					print(avg([1, 2])
+			</code></pre>
+			<div class="fragment">
+				<code>compute.py</code>
+				<pre><code class="python" data-trim>
+					import helpers
+					print('We are in compute.py')
+					print(helpers.avg([1, 2, 3, 4])
+				</code></pre>
+			</div>
+
+			<div class="fragment">
+				<pre><code class="python" data-trim>
+					$ python compute.py
+					We are in compute.py
+					2.5
+				</code></pre>
+			</div>
+		</section>
+
+		<section>
+			<h3>Module vs Package</h3>
+			<pre><code class="python" data-trim>
+				package/
+					- __init__.py
+					- a.py
+					- b.py
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				import package.a
+				import package.b
+
+				package.a.function_1()
+				package.b.function_2()
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exercise - <code>mathlib</code></h3>
+
+			<ol>
+				<li>Create a new module `mathlib`</li>
+				<li>implement <code>avg(sequence)</code></li>
+				<li>implement <code>hypotenuse(a, b)</code></li>
+				<li>use it from different module</li>
+			</ol>
+
+			<div>
+				<img  class="plain" src="https://wikimedia.org/api/rest_v1/media/math/render/svg/5fd521cee81d583ce94bf6710984cc2a9eb7c3da">
+			</div>
+			<pre><code class="python" data-trim>
+				>>> import mathlib
+				>>> mathlib.avg([1, 2])
+				1.5
+				>>> mathlib.hypotenuse(3, 4)
+				5.0
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>End</h1>
+		</section>
+
+	</div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        history: true,
+	    pdfSeparateFragments: false,
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>

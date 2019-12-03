@@ -1,0 +1,601 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>11. Engeto</title>
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/solarized.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<style>
+		.container {
+			display: flex;
+		}
+
+		.col {
+			flex: 1;
+		}
+	</style>
+
+	<!-- Printing and PDF exports -->
+	<script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+<body>
+
+<div class="reveal">
+	<div class="slides">
+		<section>
+			<img src="img/engeto.png">
+			<h1>11. File Formats</h1>
+		</section>
+
+		<section>
+			<h1>
+				Last lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3><code>import</code></h3>
+			<pre><code class="python" data-trim>
+				>>> import random
+				>>> random.random()
+				0.16541488247158354
+				>>> from random import randint
+				>>> randint(1, 10)
+				6
+				>>> from random import randint as my_randint
+				>>> my_randint(1, 10)
+				3
+				>>> from random import * # not recommended
+				>>> choice([1, 2, 3])
+				2
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Python standard library</h3>
+			Batteries included <br>
+			<a href="https://docs.python.org/3/library/">Standard library</a>
+		</section>
+
+		<section>
+			<h3><code>os</code></h3>
+			<pre><code class="python" data-trim>
+				>>> import os
+				>>> os.listdir()
+				['prezentace']
+				>>> os.getcwd()
+				'/home/psebek/projects/engeto/10'
+				>>> os.mkdir('test_dir')
+				>>> os.listdir()
+				['test_dir', 'prezentace']
+			</code></pre>
+		</section>
+
+		<section>
+			<h3><code>os.path</code></h3>
+			<pre><code class="python" data-trim>
+				>>> import os.path  # or just os
+				>>> os.path.exists('test_dir')
+				True
+				>>> os.path.isfile('test_dir')
+				False
+				>>> os.path.isdir('test_dir')
+				True
+				>>> path = os.path.join('test_dir', 'sub_folder', 'file.txt')
+				>>> path
+				'test_dir/sub_folder/file.txt'
+				>>> os.path.abspath(path)
+				'/home/psebek/projects/engeto/10/test_dir/sub_folder/file.txt'
+				>>> os.path.basename(path)
+				'file.txt'
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Third-party packages</h3>
+			<a href="https://pypi.org/">PyPI</a>
+		</section>
+
+		<section>
+			<h3>Virtual environment</h3>
+			Solves package versions conflicts <br>
+			<a href="https://docs.python.org/3/tutorial/venv.html">Tutorial venv</a>
+
+			<pre><code class="bash" data-trim>
+				$ python3 -m venv .env
+				$ ls
+				.env
+				$ source .env/bin/activate
+				(.env) $ python --version
+				3.7.5
+			</code></pre>
+		</section>
+
+		<section>
+			<h3><code>pip</code></h3>
+			Installs third-party packages <br>
+			<pre><code class="python" data-trim>
+				(.env) $ pip list
+				Package    Version
+				---------- -------
+				pip        19.1.1
+				setuptools 41.2.0
+				(.env) $ pip install tabulate
+				...
+				Successfully installed tabulate-0.8.6
+				(.env) $ python
+				>>> import tabulate
+				>>> print(tabulate.tabulate([[1, 2], [3, 4]]))
+				-  -
+				1  2
+				3  4
+				-  -
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Importing own module</h3>
+			<code>helpers.py</code>
+			<pre><code class="python" data-trim>
+				def avg(sequence):
+					return sum(sequence) / len(sequence)
+			</code></pre>
+			<div class="fragment">
+				<code>compute.py</code>
+				<pre><code class="python" data-trim>
+					import helpers
+					print(helpers.avg([1, 2, 3, 4])
+				</code></pre>
+			</div>
+
+			<div class="fragment">
+				<code>terminal</code>
+				<pre><code class="python" data-trim>
+					$ python compute.py
+					2.5
+				</code></pre>
+			</div>
+		</section>
+
+		<section>
+			<h3>Importing own module</h3>
+			<code>helpers.py</code>
+			<pre><code class="python" data-trim>
+				def avg(sequence):
+					return sum(sequence) / len(sequence)
+
+				print('We are in helpers.py')
+				print(avg([1, 2])
+			</code></pre>
+			<div class="fragment">
+				<code>compute.py</code>
+				<pre><code class="python" data-trim>
+					import helpers
+					print('We are in compute.py')
+					print(helpers.avg([1, 2, 3, 4])
+				</code></pre>
+			</div>
+
+			<div class="fragment">
+				<pre><code class="python" data-trim>
+					$ python compute.py
+					We are in helpers.py
+					1.5
+					We are in compute.py
+					2.5
+				</code></pre>
+			</div>
+		</section>
+
+
+		<section>
+			<h3>Importing own module</h3>
+			<code>helpers.py</code>
+			<pre><code class="python" data-trim>
+				def avg(sequence):
+					return sum(sequence) / len(sequence)
+				if __name__ == '__main__': # <---
+					print('We are in helpers.py')
+					print(avg([1, 2])
+			</code></pre>
+			<div class="fragment">
+				<code>compute.py</code>
+				<pre><code class="python" data-trim>
+					import helpers
+					print('We are in compute.py')
+					print(helpers.avg([1, 2, 3, 4])
+				</code></pre>
+			</div>
+
+			<div class="fragment">
+				<pre><code class="python" data-trim>
+					$ python compute.py
+					We are in compute.py
+					2.5
+				</code></pre>
+			</div>
+		</section>
+
+		<section>
+			<h3>Module vs Package</h3>
+			<pre><code class="python" data-trim>
+				package/
+					- __init__.py
+					- a.py
+					- b.py
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				import package.a
+				import package.b
+
+				package.a.function_1()
+				package.b.function_2()
+			</code></pre>
+		</section>
+
+		<section>
+			<h1>
+				Today's lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3>File formats</h3>
+			<img src="img/file_formats.png" width="600", height="450">
+		</section>
+
+		<section>
+			<h3>CSV</h3>
+			<ul>
+				<li>Comma-separated values</li>
+				<li>Each record on a new line</li>
+				<li>If a value contains comma wrap it to double-quotes</li>
+				<li>"Excel" format</li>
+				<li>Used for tabular data</li>
+				<li><a href="https://engeto.com/files/example.csv">example.csv</a> z webu Engeto</li>
+			</ul>
+			<pre><code class="nohighlight" data-trim>
+			Surname,Name,Full Name,Age,City,Job,Gender
+			Smith,John,"Smith, John",32,London,Programmer,
+			Doe,Joe,"Doe, Joe",34,Liverpool,,Male
+			Murphy,Ann,"Murphy, Ann",29,London,Admin,Female
+			Cook,Floyd,"Cook, Floyd",28,,Tester,Male
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Reading CSV</h3>
+			<pre><code class="python" data-trim>
+                import csv
+                with open('example.csv') as file:
+                    reader = csv.reader(file)
+                    for row in reader:
+                        print(row)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+			['Surname', 'Name', 'Full Name', 'Age', 'City', 'Job', 'Gender']
+			['Smith', 'John', 'Smith, John', '32', 'London', 'Programmer', '']
+			['Doe', 'Joe', 'Doe, Joe', '34', 'Liverpool', '', 'Male']
+			['Murphy', 'Ann', 'Murphy, Ann', '29', 'London', 'Admin', 'Female']
+			...
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			Print every person from London.
+			<pre><code class="python" data-trim>
+			$ python read_csv.py
+			['Smith', 'John', 'Smith, John', '32', 'London', 'Programmer', '']
+			['Murphy', 'Ann', 'Murphy, Ann', '29', 'London', 'Admin', 'Female']
+			['Harris', 'Roy', 'Harris, Roy', '22', 'London', 'Junior Programmer', 'Male']
+			['Galagher', 'Fred', 'Galagher, Fred', '38', 'London', 'Programmer', 'Male']
+			['Murphy', 'John', 'Murphy, John', '35', 'London', 'Programmer', 'Male']
+			</code></pre>
+			Print only their full names
+			<pre><code class="python" data-trim>
+				$ python read_csv.py
+				Smith, John
+				Murphy, Ann
+				Harris, Roy
+				Galagher, Fred
+				Murphy, John
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Writing CSV</h3>
+			<pre><code class="python" data-trim>
+                import csv
+
+                data = [
+                    ['Surname', 'Name', 'Full Name', 'Age', 'City', 'Job', 'Gender'],
+                    ['Smith', 'John', 'Smith, John', '32', 'London', 'Programmer', ''],
+                    ['Doe', 'Joe', 'Doe, Joe', '34', 'Liverpool', '', 'Male'],
+                ]
+
+                with open('write.csv', 'w') as file:
+                    writer = csv.writer(file)
+                    for row in data:
+                        writer.writerow(row)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				Surname,Name,Full Name,Age,City,Job,Gender
+				Smith,John,"Smith, John",32,London,Programmer,
+				Doe,Joe,"Doe, Joe",34,Liverpool,,Male
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			Read from <code>example.csv</code> and write to <code>londoners.csv</code> only people from London.
+		</section>
+
+		<section>
+			<h3>CSV DictReader</h3>
+			<pre><code class="python" data-trim>
+                import csv
+
+                with open('example.csv') as file:
+                    reader = csv.DictReader(file)
+                    for row in reader:
+                        print(row)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+				OrderedDict([('Surname', 'Smith'), ('Name', 'John'), ('Full Name', 'Smith, John'), ('Age', '32'), ('City', 'London'), ('Job', 'Programmer'), ('Gender', '')])
+				OrderedDict([('Surname', 'Doe'), ('Name', 'Joe'), ('Full Name', 'Doe, Joe'), ('Age', '34'), ('City', 'Liverpool'), ('Job', ''), ('Gender', 'Male')])
+				OrderedDict([('Surname', 'Murphy'), ('Name', 'Ann'), ('Full Name', 'Murphy, Ann'), ('Age', '29'), ('City', 'London'), ('Job', 'Admin'), ('Gender', 'Female')])
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>CSV DictWriter</h3>
+			<pre><code class="python" data-trim>
+                import csv
+
+                data = [
+                    {'Surname': 'Smith', 'Name': 'John', 'Full Name': 'Smith, John', 'Age': '32', 'City': 'London', 'Job': 'Programmer', 'Gender': ''},
+                    {'Surname': 'Doe', 'Name': 'Joe', 'Full Name': 'Doe, Joe', 'Age': '34', 'City': 'Liverpool', 'Job': '', 'Gender': 'Male'},
+                    {'Surname': 'Murphy', 'Name': 'Ann', 'Full Name': 'Murphy, Ann', 'Age': '29', 'City': 'London', 'Job': 'Admin', 'Gender': 'Female'},
+                ]
+
+                with open('write.csv', 'w') as file:
+                    writer = csv.DictWriter(file, fieldnames=['Surname', 'Name', 'Full Name', 'Age', 'City', 'Job', 'Gender'])
+                    for row in data:
+                        writer.writerow(row)
+            </code></pre>
+
+			<pre><code class="plain" data-trim>
+				Smith,John,"Smith, John",32,London,Programmer,
+				Doe,Joe,"Doe, Joe",34,Liverpool,,Male
+				Murphy,Ann,"Murphy, Ann",29,London,Admin,Female
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>JSON</h3>
+			<ul>
+				<li>JavaScript Object Notation</li>
+				<li>Very close to printed Python dictionary or list</li>
+				<li>Data types: Number, String, Boolean, Array, Object, <code>null</code></li>
+			</ul>
+
+			<pre><code class="python" data-trim>
+				{
+				  "firstName": "John",
+				  "lastName": "Smith",
+				  "isAlive": true,
+				  "age": 27,
+				  "address": {
+					"streetAddress": "21 2nd Street",
+					"city": "New York",
+					"state": "NY",
+					"postalCode": "10021-3100"
+				  },
+				  "phoneNumbers": [
+					{
+					  "type": "office",
+					  "number": "646 555-4567"
+					},
+					{
+					  "type": "mobile",
+					  "number": "123 456-7890"
+					}
+				  ],
+				  "children": [],
+				  "spouse": null
+				}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Python to JSON mapping</h3>
+			<ul>
+				<li>Non-string dictionary keys are converted to strings.</li>
+				<li><code>True</code> is mapped to <code>true</code> , <code>False</code> is mapped to <code>false</code>.</li>
+				<li><code>None</code> is mapped to <code>null</code>.</li>
+				<li>Single quotes on strings are converted to double quotes.</li>
+				<li><code>dict</code> is converted to <code>Object</code>.</li>
+				<li><code>list</code> is converted to <code>Array</code>.</li>
+				<li>Some object cannot be automatically converted, e.g. <code>set</code>.</li>
+			</ul>
+		</section>
+
+		<section>
+			<h3>Reading JSON</h3>
+			Wikipedia <a href="https://en.wikipedia.org/wiki/JSON#Example">JSON example</a>
+
+			<pre><code class="python" data-trim>
+                import json
+
+                with open('example.json') as file:
+                    person = json.load(file)
+                    print(person)
+			</code></pre>
+
+			<pre><code class="plain" data-trim>
+				{'firstName': 'John', 'lastName': 'Smith', 'isAlive': True, 'age': 27, 'address': {'streetAddress': '21 2nd Street', 'city': 'New York', 'state': 'NY', 'postalCode': '10021-3100'}, 'phoneNumbers': [{'type': 'home', 'number': '212 555-1234'}, {'type': 'office', 'number': '646 555-4567'}, {'type': 'mobile', 'number': '123 456-7890'}], 'children': [], 'spouse': None}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			Read <code>example.json</code>, create and print a dictionary with keys:
+			<ul>
+				<li><code>fullName</code> (<code>firstName + ' ' + lastName</code>)</li>
+				<li><code>phoneNumbers</code></li>
+			</ul>
+			<pre><code class="python" data-trim>
+				{'fullName': 'John Smith', 'phoneNumbers': [{'type': 'home', 'number': '212 555-1234'}, {'type': 'office', 'number': '646 555-4567'}, {'type': 'mobile', 'number': '123 456-7890'}]}
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Writing JSON</h3>
+			<pre><code class="python" data-trim>
+                import json
+
+                person = {
+                    'fullName': 'John Smith',
+                    'phoneNumbers': [
+                        {'type': 'home', 'number': '212 555-1234'},
+                        {'type': 'office', 'number': '646 555-4567'},
+                        {'type': 'mobile', 'number': '123 456-7890'}
+                    ]
+                }
+
+                with open('write.json', 'w') as file:
+                    json.dump(person, file, indent=2)
+            </code></pre>
+
+			<pre><code class="plain" data-trim>
+                {
+                  "fullName": "John Smith",
+                  "phoneNumbers": [
+                    {
+                      "type": "home",
+                      "number": "212 555-1234"
+                    },
+                    {
+                      "type": "office",
+                      "number": "646 555-4567"
+                    },
+                    {
+                      "type": "mobile",
+                      "number": "123 456-7890"
+                    }
+                  ]
+                }
+            </code></pre>
+		</section>
+
+		<section>
+			<h3>JSON is fine for lists too</h3>
+			<pre><code class="python" data-trim>
+                data = ['John', 'Jane', 'Jennifer']
+
+                with open('write.json', 'w') as file:
+                    json.dump(data, file, indent=2)
+            </code></pre>
+
+			<pre><code class="python" data-trim>
+                [
+                  "John",
+                  "Jane",
+                  "Jennifer"
+                ]
+            </code></pre>
+
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			Write a dictionary with your name and age to a file.
+		</section>
+
+		<section>
+			<h3><a href="https://requests.kennethreitz.org/en/master/">Requests</a></h3>
+			Python HTTP library.
+			<pre><code class="python" data-trim>
+				$ pip install requests
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				>>> import requests
+				>>> response = requests.get('https://seznam.cz')
+				>>> response.status_code
+				200
+				>>> response.text
+				'&lt;!DOCTYPE html&gt;&lt;html lang="cs" class="html-no-js html-no-flex html-no-column-count html-no-hover"&gt;&lt;head&gt;...
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>API</h3>
+			Application Programming Interface <br>
+			<a href="https://swapi.co">https://swapi.co</a>
+
+			<pre><code class="python" data-trim>
+				>>> import requests
+				>>> response = requests.get('https://swapi.co/api/people/1')
+				>>> response.text
+				'{"name":"Luke Skywalker","height":"172","mass":"77","hair_color":"blond","skin_color":"fair","eye_color":"blue","birth_year":"19BBY","gender":"male","homeworld":"https://swapi.co/api/planets/1/","films":["https://swapi.co/api/films/2/","https://swapi.co/api/films/6/","https://swapi.co/api/films/3/","https://swapi.co/api/films/1/","https://swapi.co/api/films/7/"],"species":["https://swapi.co/api/species/1/"],"vehicles":["https://swapi.co/api/vehicles/14/","https://swapi.co/api/vehicles/30/"],"starships":["https://swapi.co/api/starships/12/","https://swapi.co/api/starships/22/"],"created":"2014-12-09T13:50:51.644000Z","edited":"2014-12-20T21:17:56.891000Z","url":"https://swapi.co/api/people/1/"}'
+				>>> response.json()
+				{'name': 'Luke Skywalker',
+				 'height': '172',
+				 'mass': '77',
+				 'hair_color': 'blond',
+				 'skin_color': 'fair',
+				...
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>Exercise</h3>
+			Use <code>requests</code> to first download content of <a href="https://swapi.co/api/people/">https://swapi.co/api/people/</a> and then download information about Luke's homeworld.
+		</section>
+
+		<section>
+			<h1>End</h1>
+		</section>
+
+	</div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        history: true,
+	    pdfSeparateFragments: false,
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>

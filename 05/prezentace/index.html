@@ -1,0 +1,341 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>For loops & ranges</title>
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/solarized.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<style>
+		.container {
+			display: flex;
+		}
+
+		.col {
+			flex: 1;
+		}
+	</style>
+
+	<!-- Printing and PDF exports -->
+	<script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+<body>
+
+<div class="reveal">
+	<div class="slides">
+		<section>
+			<img src="img/engeto.png">
+			<h1>5. For loops</h1>
+		</section>
+
+		<section>
+			<h1>
+				Python 3.8
+			</h1>
+		</section>
+
+		<section>
+			<h1>
+				CodeBrew Hackaton
+			</h1>
+		</section>
+
+		<section>
+			<h3>Naming</h3>
+			<ul>
+				<li>Properly named variables</li>
+				<li>Commit names</li>
+			</ul>
+		</section>
+
+		<section>
+			<h1>
+				Last lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3>Repetition</h3>
+			<pre><code class="pythoh" data-trim>
+				cart = []
+				item1 = float(input('Enter the price: '))
+				item2 = float(input('Enter the price: '))
+				item3 = float(input('Enter the price: '))
+
+				cart.append(item1)
+				cart.append(item2)
+				cart.append(item3)
+
+				total_price = cart[0] + cart[1] + cart[2]
+				print('CART: ' + str(cart))
+				print('Total Price: ' + str(total_price))
+			</code></pre>
+		</section>
+
+		<section>
+			<h1><strong>D</strong>on't <strong>R</strong>epeat <strong>Y</strong>ourself!</h1>
+		</section>
+
+		<section>
+			<h3>While</h3>
+			Zatímco platí podmínka, prováděj kód
+
+			<div class="container">
+				<div class="col">
+					<pre><code class="python" data-trim>
+						while condition:
+							command_1
+							command_2
+						command_3
+					</code></pre>
+				</div>
+
+				<div class="col">
+					<img src="img/while.png">
+				</div>
+			</div>
+		</section>
+
+		<section>
+			<h3>While - example</h3>
+			<pre><code class="python" data-trim>
+				i = 0
+				total = 0
+				while i < 4:
+					total += i
+					i += 1
+				print(total)
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>While - to infinity and beyond</h3>
+			<pre><code class="python" data-trim>
+				i = 0
+				total = 0
+				while i < 4:
+					total += i
+					print(total)
+			</code></pre>
+		</section>
+
+
+		<section>
+			<h3>Continue</h3>
+			<div class="container">
+				<div class="col">
+		    <pre><code class="python" data-trim>
+				words = [...]
+				while words:
+					word = words.pop()
+					if not word.numeric():
+						continue
+					number = int(word)
+					total += number
+					...
+			</code></pre>
+				</div>
+				<div class="col">
+					<img src="img/while_continue.png">
+				</div>
+			</div>
+		</section>
+
+
+		<section>
+			<h3>Break</h3>
+			<div class="container">
+				<div class="col">
+		    <pre><code class="python" data-trim>
+				words = [...]
+				while words:
+					word = words.pop()
+					if not word:
+						break
+					process(word)
+			</code></pre>
+				</div>
+				<div class="col">
+					<img src="img/while_break.png">
+				</div>
+			</div>
+		</section>
+
+		<section>
+			<h1>
+				Today's lesson
+			</h1>
+		</section>
+
+		<section>
+			<h3>for</h3>
+			Pro každý prvek x z collection prováděj kód
+
+			<pre><code class="python" data-trim>
+				for x in collection:
+					process(x)
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>for example</h3>
+
+			<pre><code class="python" data-trim>
+				>>> for x in ('alfa', 'beta', 'gamma'):
+				...     print(x)
+				...
+				alfa
+				beta
+				gamma
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>for</h3>
+
+			<pre><code class="python" data-trim>
+				for x in 'abc':
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				for x in ['alfa', 'beta', 'gamma']:
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				for x in {'alfa', 'beta', 'gamma'}:
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				for x in {'alfa': 0, 'beta': 1, 'gamma': 2}:
+			</code></pre>
+		</section>
+
+		<section>
+			<h3>range</h3>
+
+			<pre><code class="python" data-trim>
+				for x in (0, 1, 2, 4, 5, 6, 7, 8, 9):
+					print(x)
+			</code></pre>
+			<pre><code class="python" data-trim>
+				for x in range(10):
+					print(x)
+			</code></pre>
+
+		</section>
+
+		<section class="fragments">
+			<h3>range</h3>
+
+			<pre><code class="python" data-trim>
+				range(stop)
+				range(start, stop)
+				range(start, stop, step)
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				range(5)
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				0, 1, 2, 3, 4
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				range(5, 10)
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				5, 6, 7, 8, 9
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				range(5, 10, 2)
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				5, 7, 9
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				range(10, 5, -1)
+			</code></pre>
+			<pre class="fragment"><code class="python" data-trim>
+				10, 9, 8, 7, 6
+			</code></pre>
+
+		</section>
+
+		<section class="fragments">
+			<h1>End<span class="fragment">?</span></h1>
+		</section>
+
+		<section class="fragments">
+			<h3>List comprehension</h3>
+
+			<pre><code class="python" data-trim>
+				powers = []
+				for x in range(10):
+					powers.append(x ** 2)
+			</code></pre>
+			<pre><code class="python" data-trim>
+			[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				powers = [x ** 2 for x in range(10)]
+			</code></pre>
+
+		</section>
+
+		<section class="fragments">
+			<h3>Dict comprehension</h3>
+
+			<pre><code class="python" data-trim>
+				powers = {}
+				for x in range(10):
+					powers[x] = x ** 2
+			</code></pre>
+
+			<pre><code class="python" data-trim>
+				{0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25, 6: 36, 7: 49, 8: 64, 9: 81}
+			</code></pre>
+
+			<pre class="fragment"><code class="python" data-trim>
+				powers = {x: x ** 2 for x in range(10)}
+			</code></pre>
+
+		</section>
+
+	</div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+        history: true,
+	    pdfSeparateFragments: false,
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>

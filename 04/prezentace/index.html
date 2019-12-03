@@ -1,0 +1,413 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>While loops</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/solarized.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/monokai.css">
+
+    <style>
+        .container {
+            display: flex;
+        }
+
+        .col {
+            flex: 1;
+        }
+    </style>
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <img src="img/engeto.png">
+            <h1>4. While loops</h1>
+        </section>
+
+	    <section>
+		    <h1>Git & HTTP API courses</h1>
+	    </section>
+
+	    <section>
+		    <h1>
+			    Last lesson
+		    </h1>
+	    </section>
+
+	    <section>
+		    <h3>
+			    Dictionary
+		    </h3>
+
+		    <div class="container">
+			    <div class="col">
+					<ul>
+						<li>condition - podmínka</li>
+						<li>integer - celé číslo</li>
+						<li>python - krajta</li>
+						<li>string - řetězec</li>
+					</ul>
+				</div>
+
+				<div class="col">
+					<pre><code class="python" data-trim>
+						words = {
+							'condition': 'podmínka',
+							'integer': 'celé číslo',
+							'python': 'krajta',
+							'string': 'řetězec',
+						}
+					</code></pre>
+				</div>
+			</div>
+	    </section>
+
+	    <section>
+		    <h3>Getting value</h3>
+		    <pre><code class="python" data-trim>
+				>>> words = {
+				...     'condition': 'podmínka',
+				...     'integer': 'celé číslo',
+				...     'python': 'krajta',
+				...     'string': 'řetězec',
+				... }
+				>>> words['python']
+				'krajta'
+		    </code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Getting value - missing key</h3>
+		    <pre><code class="python" data-trim>
+				>>> words['java']
+				Traceback (most recent call last):
+				  File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+				KeyError: 'java'
+				>>> words.get('java', 'MISSING')
+				'MISSING'
+		    </code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Adding / updating</h3>
+		    <pre><code class="python" data-trim>
+			>>> words['java'] = 'jáva'
+			>>> words['python'] = 'hroznýš'
+			>>> words
+			{
+				'condition': 'podmínka',
+				'integer': 'celé číslo',
+				'java': 'jáva',
+				'python': 'hroznýš',
+				'string': 'řetězec'
+			}
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Deleting</h3>
+		    <pre><code class="python" data-trim>
+			>>> del words['java']
+			>>> words.pop('python')
+			'hroznýš'
+			>>> words
+			{
+				'condition': 'podmínka',
+				'integer': 'celé číslo',
+				'string': 'řetězec'
+			}
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Iterating</h3>
+		    <pre><code class="python" data-trim>
+				>>> words
+				{
+					'condition': 'podmínka',
+					'integer': 'celé číslo',
+					'string': 'řetězec'
+				}
+				>>> words.keys()
+				dict_keys(['condition', 'integer', 'string'])
+				>>> words.values()
+				dict_values(['podmínka', 'celé číslo', 'řetězec'])
+				>>> words.items()
+				dict_items([('condition', 'podmínka'), ('integer', 'celé číslo'), ('string', 'řetězec')])
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Nesting</h3>
+		    <pre><code class="python" data-trim>
+				>>> words['python'] = {'nature': 'krajta', 'it': 'programovací jazyk'}
+				>>> words
+				{
+					'condition': 'podmínka',
+					'integer': 'celé číslo',
+					'python': {'it': 'programovací jazyk', 'nature': 'krajta'},
+					'string': 'řetězec'
+				}
+				>>> words['python']['it']
+				'programovací jazyk'
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Update with another dict</h3>
+		    <pre><code class="python" data-trim>
+			>>> words.update({'float': 'desetinné číslo', 'string': 'řetěz'})
+			>>> words
+			{
+				'condition': 'podmínka',
+				'float': 'desetinné číslo',
+				'integer': 'celé číslo',
+				'python': {'it': 'programovací jazyk', 'nature': 'krajta'},
+				'string': 'řetěz'
+			}
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Set</h3>
+		    <pre><code class="python" data-trim>
+				>>> s = {1, 1, 2, 3, 8}
+				>>> s
+				{8, 1, 2, 3}
+			    >>> 3 in s
+			    True
+				>>> set('Engeto academy')
+				{'o', 'e', 'y', 't', 'c', 'm', ' ', 'a', 'E', 'd', 'n', 'g'}
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Adding / removing</h3>
+		    <pre><code class="python" data-trim>
+				>>> s.add(6)
+				>>> s
+				{1, 2, 3, 6, 8}
+				>>> s.remove(3)
+				>>> s
+				{1, 2, 6, 8}
+				>>> s.pop()
+				1 # random element
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Comparison</h3>
+		    <pre><code class="python" data-trim>
+			    >>> s1 = {1, 2, 3}
+			    >>> s2 = {2, 3}
+			    >>> s1 <= s2  # s1.issubset(s2)
+			    False
+			    >>> s1 >= s2  # s1.issuperset(s2)
+			    True
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>Set operations</h3>
+		    <pre><code class="python" data-trim>
+				>>> s1 = {1, 2, 3}
+				>>> s2 = {2, 3, 4}
+				>>> s1 | s2  # s1.union(s2)
+				{1, 2, 3, 4}
+				>>> s1 & s2  # s1.intersection(s2)
+				{2, 3}
+				>>> s1 - s2  # s1.difference(s2)
+				{1}
+			</code></pre>
+	    </section>
+
+
+	    <section>
+		    <h1>
+			    Today's lesson
+		    </h1>
+	    </section>
+
+	    <section>
+		    <h3>Repetition</h3>
+		    <pre><code class="pythoh" data-trim>
+				cart = []
+				item1 = float(input('Enter the price: '))
+				item2 = float(input('Enter the price: '))
+				item3 = float(input('Enter the price: '))
+
+				cart.append(item1)
+				cart.append(item2)
+				cart.append(item3)
+
+				total_price = cart[0] + cart[1] + cart[2]
+				print('CART: ' + str(cart))
+				print('Total Price: ' + str(total_price))
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h1><strong>D</strong>on't <strong>R</strong>epeat <strong>Y</strong>ourself!</h1>
+	    </section>
+
+	    <section>
+		    <h3>While</h3>
+		    Zatímco platí podmínka, prováděj kód
+
+		    <div class="container">
+			    <div class="col">
+					<pre><code class="python" data-trim>
+						while condition:
+							command_1
+							command_2
+						command_3
+					</code></pre>
+			    </div>
+
+			    <div class="col">
+				    <img src="img/while.png">
+			    </div>
+		    </div>
+	    </section>
+
+	    <section>
+		    <h3>While - example</h3>
+		    <pre><code class="python" data-trim>
+				i = 0
+				total = 0
+				while i < 4
+					total += i
+					i += 1
+				print(total)
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h3>While - to infinity and beyond</h3>
+		    <pre><code class="python" data-trim>
+				i = 0
+				total = 0
+				while i < 4:
+					total += i
+					print(total)
+			</code></pre>
+	    </section>
+
+	    <section>
+		    <h1>Project #1</h1>
+	    </section>
+
+
+	    <section class="fragments">
+		    <h1>End<span class="fragment">?</span></h1>
+	    </section>
+
+	    <section>
+		    <h3>Continue</h3>
+		    <div class="container">
+			    <div class="col">
+		    <pre><code class="python" data-trim>
+				words = [...]
+				while words:
+					word = words.pop()
+					if not word.numeric():
+						continue
+					number = int(word)
+					total += number
+					...
+			</code></pre>
+			    </div>
+			    <div class="col">
+				    <img src="img/while_continue.png">
+			    </div>
+		    </div>
+	    </section>
+
+
+	    <section>
+		    <h3>Break</h3>
+		    <div class="container">
+			    <div class="col">
+		    <pre><code class="python" data-trim>
+				words = [...]
+				while words:
+					word = words.pop()
+					if not word:
+						break
+					process(word)
+			</code></pre>
+			    </div>
+			    <div class="col">
+				    <img src="img/while_break.png">
+			    </div>
+		    </div>
+	    </section>
+
+
+	    <section>
+		    <h3>GIT</h3>
+		    Distributed version-control system<br>
+		    <ul>
+			    <li>repository</li>
+			    <li>commit</li>
+			    <li><a href="http://github.com">github.com</a></li>
+		    </ul>
+	    </section>
+
+	    <section>
+		    <h3>GIT local commands</h3>
+		    <ul>
+			    <li><code>git init</code> - init empty repo</li>
+			    <li><code>git clone</code> - clone remote repo</li>
+			    <li><code>git add &lt;file&gt;</code></li> - add file to staging area
+			    <li><code>git commit</code> - create a new commit</li>
+			    <li><code>git status</code> - check current file status</li>
+		    </ul>
+	    </section>
+
+	    <section>
+		    <h3>GIT remote commands</h3>
+		    <ul>
+			    <li><code>git pull</code> - download current data from the remote repo</li>
+			    <li><code>git push</code> - upload your repo to the remote repo</li>
+		    </ul>
+	    </section>
+
+
+    </div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+	    history: true,
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>
